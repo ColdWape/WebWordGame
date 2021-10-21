@@ -1,23 +1,58 @@
-﻿    #main {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-        font-size: 30px;
+﻿body {
+    background-color: #4B4B4B;
+    font-weight:bold;
+}
+
+#main {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    font-size: 22pt;
+}
+
+#helloWords {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.myBtn {
+    width: 600px;
+    height: 75px;
+    margin: 10px;
+    border: 0;
+    border-radius: 25px;
+    font-size: 30px;
+}
+
+#logInForm {
+    padding: 20px;
+    border: solid black;
+    border-radius: 25px;
+    max-width: 550px;
+}
+
+    #logInForm .text-box {
+        background-color: #414141;
+        width: 95%;
+        font-size: 20pt;
+        margin-left: 4px;
+        margin-right: 6px;
+        border-radius: 10px;
     }
 
-    #helloWords {
-        text-align: center;
-        margin-bottom: 35px;
-    }
+        #logInForm .text-box:focus {
+            outline: none !important;
+        }
+.menuBtns {
+    background-color: #414141;
+    font-size: 14pt;
+    border-radius: 5px;
+    box-shadow: none;
+    border: 2px solid #212121;
+}
+    
+        
 
-    .myBtn {
-        width: 600px;
-        height: 75px;
-        margin: 10px;
-        border: 0;
-        border-radius: 25px;
-        font-size: 30px;
-    }

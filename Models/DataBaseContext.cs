@@ -8,6 +8,7 @@ namespace WebWordGame.Models
 {
     public class DataBaseContext : DbContext
     {
+        DbSet<PersonModel> people { get; set; }
         public DataBaseContext(DbContextOptions<DataBaseContext> dbContextOptions) 
             : base(dbContextOptions)
         {

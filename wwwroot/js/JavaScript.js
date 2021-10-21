@@ -33,3 +33,16 @@ function showGameQuantityPeopleChoosing() {
     document.getElementById("startBtns").style.display = 'none';
 
 }
+
+function showLoginMenu() {
+    document.getElementById("registration").style.display = 'none';
+    document.getElementById("login").style.display = 'inline';
+    
+
+}
+
+function showRegistrationMenu() {
+    document.getElementById("registration").style.display = 'inline';
+    document.getElementById("login").style.display = 'none';
+
+}
