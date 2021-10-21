@@ -1,2 +1,23 @@
-﻿body {
-}
+﻿    #main {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        font-size: 30px;
+    }
+
+    #helloWords {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .myBtn {
+        width: 600px;
+        height: 75px;
+        margin: 10px;
+        border: 0;
+        border-radius: 25px;
+        font-size: 30px;
+    }

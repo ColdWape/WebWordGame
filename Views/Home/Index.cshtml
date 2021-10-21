@@ -1,4 +1,46 @@
-﻿
+﻿@{
+    ViewBag.Title = "The Word Game";
+}
 
 
-    <h1>Страницафджыолрррвasdasdрфф</h1>
+
+<div id="main">
+
+    <div>
+
+        <div id="startBtns">
+            <input class="myBtn" style="background-color: rgb(255, 115, 0);" type="button" value="Начать игру" onclick="showAuthTypeChoosing();">
+            <br>
+            <input class="myBtn" style="background-color: rgb(179, 255, 0);" type="button" value="Правила">
+            <br>
+            <input class="myBtn" style="background-color: rgb(0, 89, 255);" type="button" value="Помощь">
+            <br>
+            <input class="myBtn" style="background-color: rgb(161, 4, 154);" type="button" value="Reports">
+        </div>
+
+        <div id="authTypeChoosingBtns" style="display: none;">
+            <input class="myBtn" style="background-color: rgb(255, 115, 0);" type="button" value="Вход" onclick="#">
+            <br>
+            <input class="myBtn" style="background-color: rgb(179, 255, 0);" type="button" value="Регистрация">
+        </div>
+
+        <div id="gameTypeChoosing" style="display: none;">
+            <a href="#"><input class="myBtn" style="background-color: rgb(255, 115, 0);" type="button" value="Играть против компьютера"></a>
+            <br>
+            <input class="myBtn" style="background-color: rgb(179, 255, 0);" type="button" value="Играть против игроков" onclick="showGameQuantityPeopleChoosing()">
+            <br>
+            <input class="myBtn" style="background-color: rgb(161, 4, 154);" type="button" value="Назад" onclick="showMainMenu();">
+        </div>
+
+        <div id="gameQuantityPeopleChoosing" style="display: none;">
+            <input class="myBtn" style="background-color: rgb(255, 115, 0);" type="button" value="Играть против одного игрока">
+            <br>
+            <input class="myBtn" style="background-color: rgb(179, 255, 0);" type="button" value="Играть против двух игроков">
+            <br>
+            <input class="myBtn" style="background-color: rgb(0, 89, 255);" type="button" value="Играть против трех игроков">
+            <br>
+            <input class="myBtn" style="background-color: rgb(161, 4, 154);" type="button" value="Назад" onclick="showGameTypeChoosingMenu();">
+        </div>
+
+    </div>
+</div>

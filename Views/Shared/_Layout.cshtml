@@ -2,23 +2,26 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    
+
     @if (ViewBag.Title != null)
     {
-    <title>@ViewBag.Title</title>
+        <title>@ViewBag.Title</title>
     }
     else
     {
-    <title>MyWordGame</title>
+        <title>MyWordGame</title>
     }
+
+    
 
     <link href="~/css/style.css" rel="stylesheet" />
     <script src="~/js/JavaScript.js"></script>
 
+    <link rel="shortcut icon" href="~/images/0_EUATjPegSR1mFzl5.jpeg" type="image/x-icon">
 </head>
 <body>
 
-    @RenderBody();
+    @RenderBody()
 
 </body>
 </html>
