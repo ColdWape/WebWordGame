@@ -1,4 +1,7 @@
-﻿@{
+﻿
+
+
+@{
     ViewBag.Title = "The Word Game";
 }
 
@@ -6,40 +9,40 @@
 
 <div id="main">
 
-    <div>
+    <div style="text-align:center" name="startMenu">
 
         <div id="startBtns">
-            <input class="myBtn" style="background-color: rgb(255, 115, 0);" type="button" value="Начать игру" onclick="showAuthTypeChoosing();">
+            <input class="menuBtns" type="button" value="Начать игру" onclick="showAuthTypeChoosing();">
             <br>
-            <input class="myBtn" style="background-color: rgb(179, 255, 0);" type="button" value="Правила">
+            <input class="menuBtns" type="button" value="Правила">
             <br>
-            <input class="myBtn" style="background-color: rgb(0, 89, 255);" type="button" value="Помощь">
+            <input class="menuBtns" type="button" value="Помощь">
             <br>
-            <input class="myBtn" style="background-color: rgb(161, 4, 154);" type="button" value="Reports">
+            <input class="menuBtns" type="button" value="Reports">
         </div>
 
         <div id="authTypeChoosingBtns" style="display: none;">
-            <input class="myBtn" style="background-color: rgb(255, 115, 0);" type="button" value="Вход" onclick="#">
+            <input class="menuBtns" type="button" value="Вход"> <!--asp-controller="LogIn" asp-action="Index" asp-route-logType="Login"-->
             <br>
-            <input class="myBtn" style="background-color: rgb(179, 255, 0);" type="button" value="Регистрация">
+            <input class="menuBtns" type="button" value="Регистрация"> <!--asp-controller="LogIn" asp-action="Index" asp-route-logType="Registration"-->
         </div>
 
         <div id="gameTypeChoosing" style="display: none;">
-            <a href="#"><input class="myBtn" style="background-color: rgb(255, 115, 0);" type="button" value="Играть против компьютера"></a>
+            <a href="#"><input class="menuBtns" type="button" value="Играть против компьютера"></a>
             <br>
-            <input class="myBtn" style="background-color: rgb(179, 255, 0);" type="button" value="Играть против игроков" onclick="showGameQuantityPeopleChoosing()">
+            <input class="menuBtns" type="button" value="Играть против игроков" onclick="showGameQuantityPeopleChoosing()">
             <br>
-            <input class="myBtn" style="background-color: rgb(161, 4, 154);" type="button" value="Назад" onclick="showMainMenu();">
+            <input class="menuBtns" type="button" value="Назад" onclick="showMainMenu();">
         </div>
 
         <div id="gameQuantityPeopleChoosing" style="display: none;">
-            <input class="myBtn" style="background-color: rgb(255, 115, 0);" type="button" value="Играть против одного игрока">
+            <input class="menuBtns" type="button" value="Играть против одного игрока">
             <br>
-            <input class="myBtn" style="background-color: rgb(179, 255, 0);" type="button" value="Играть против двух игроков">
+            <input class="menuBtns" type="button" value="Играть против двух игроков">
             <br>
-            <input class="myBtn" style="background-color: rgb(0, 89, 255);" type="button" value="Играть против трех игроков">
+            <input class="menuBtns" type="button" value="Играть против трех игроков">
             <br>
-            <input class="myBtn" style="background-color: rgb(161, 4, 154);" type="button" value="Назад" onclick="showGameTypeChoosingMenu();">
+            <input class="menuBtns" type="button" value="Назад" onclick="showGameTypeChoosingMenu();">
         </div>
 
     </div>

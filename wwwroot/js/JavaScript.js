@@ -1,4 +1,4 @@
-﻿var userName = "q";
+﻿var userName = "";
 
 function showAuthTypeChoosing() {
     if (userName == "") {
@@ -34,15 +34,35 @@ function showGameQuantityPeopleChoosing() {
 
 }
 
-function showLoginMenu() {
-    document.getElementById("registration").style.display = 'none';
-    document.getElementById("login").style.display = 'inline';
+function showLoginMenu(userChooseLogIn) {
+    if (userChooseLogIn) {
+        document.getElementById("registration").style.display = 'none';
+        document.getElementById("login").style.display = 'inline';
+    }
+    else {
+        document.getElementById("registration").style.display = 'inline';
+        document.getElementById("login").style.display = 'none';
+    }
+    
     
 
 }
 
-function showRegistrationMenu() {
-    document.getElementById("registration").style.display = 'inline';
-    document.getElementById("login").style.display = 'none';
 
+
+/*
+//Проверка введенных данных при регистрации
+
+var nameBox = document.getElementById("LoginName");
+var emailBox = document.getElementById("Email");
+var passwordBox = document.getElementById("Password");
+var secondPasswordBox = document.getElementById("checkPassword");
+var registerForm = document.getElementById("registrationForm");
+registerForm.addEventListener('submit', function (event) {
+
+    if (nameBox.nodeValue == "") {
+        nameBox.nodeValue = "ПОЛЕ";
+    event.preventDefault();
+    return false;
 }
+});*/

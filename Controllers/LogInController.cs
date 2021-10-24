@@ -4,84 +4,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebWordGame.Models;
 
 namespace WebWordGame.Controllers
 {
     public class LogInController : Controller
     {
-        // GET: LogInController
+        private readonly DataBaseContext _dataBaseContext;
+
+        
+
+        public LogInController(DataBaseContext dataBaseContext)
+        {
+
+            _dataBaseContext = dataBaseContext;
+        }
+
+        
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: LogInController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: LogInController/Create
+        
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
-
-        // POST: LogInController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(PersonModel person)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _dataBaseContext.people.Add(person);
+            _dataBaseContext.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
-        // GET: LogInController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: LogInController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: LogInController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: LogInController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }

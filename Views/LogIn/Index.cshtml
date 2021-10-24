@@ -5,7 +5,7 @@
         <div id="logInForm">
             <div id="registration">
 
-                <form asp-action="Create">
+                <form asp-action="Create" name="registrationForm">
                     <div style="text-align: center; text-decoration: underline;">
                         Зарегистрируйся и играй
                     </div>
@@ -29,7 +29,7 @@
                     <br />
 
                     <input class="menuBtns" type="submit" value="Зарегистрироваться" />
-                    <input class="menuBtns" type="button" value="Уже есть аккаунт?" onclick="showLoginMenu()" />
+                    <input class="menuBtns" type="button" value="Уже есть аккаунт?" onclick="showLoginMenu(true)" />
                     <input class="menuBtns" type="button" value="В главное меню" onclick="" />
 
                 </form>
@@ -38,29 +38,29 @@
 
             <div id="login" style="display: none;">
 
-
-                <div style="text-align: center; text-decoration: underline;">
-                    Войди и играй
-                </div>
-                
-
-                @Html.LabelFor(model => model.LoginName)
-                <br />
-                @Html.EditorFor(model => model.LoginName)
-
-                <br />
-                @Html.LabelFor(model => model.Password)
-                <br />
-                @Html.EditorFor(model => model.Password)
+                <form asp-action="" name="registrationForm">
+                    <div style="text-align: center; text-decoration: underline;">
+                        Войди и играй
+                    </div>
 
 
-                <input class="menuBtns" type="submit" value="Войти" />
-                <input class="menuBtns" type="button" value="Нет аккаунта?" onclick="showRegistrationMenu()" />
-                <input class="menuBtns" type="button" value="В главное меню" onclick="" />
+                    @Html.LabelFor(model => model.LoginName)
+                    <br />
+                    @Html.EditorFor(model => model.LoginName)
+
+                    <br />
+                    @Html.LabelFor(model => model.Password)
+                    <br />
+                    @Html.EditorFor(model => model.Password)
+
+
+                    <input class="menuBtns" type="submit" value="Войти" />
+                    <input class="menuBtns" type="button" value="Нет аккаунта?" onclick="showLoginMenu(false)" />
+                    <input class="menuBtns" type="button" value="В главное меню" onclick="" />
 
 
 
-
+                </form>
             </div>
 
 
