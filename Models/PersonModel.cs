@@ -11,6 +11,7 @@ namespace WebWordGame.Models
         public int Id { get; set; }
 
         [Display(Name = "Логин")]
+        
         public string LoginName { get; set; }
 
         [Display(Name = "Почтовый адрес")]

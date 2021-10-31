@@ -34,18 +34,23 @@ function showGameQuantityPeopleChoosing() {
 
 }
 
+
 function showLoginMenu(userChooseLogIn) {
     if (userChooseLogIn) {
         document.getElementById("registration").style.display = 'none';
+
         document.getElementById("login").style.display = 'inline';
+
     }
     else {
         document.getElementById("registration").style.display = 'inline';
+
         document.getElementById("login").style.display = 'none';
     }
-    
-    
+}
 
+function goToThePageForBtns(inputLink) {
+    document.location.href = inputLink;
 }
 
 

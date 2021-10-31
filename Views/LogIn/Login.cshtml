@@ -1,0 +1,41 @@
+﻿@model WebWordGame.Models.PersonModel
+
+<div>
+    <div id="main">
+        <div id="logInForm">
+            
+            <div id="login"  style="display: inline;">
+
+                <form asp-action="" name="registrationForm">
+                    <div style="text-align: center; text-decoration: underline;">
+                        Войди и играй
+                    </div>
+
+
+                    @Html.LabelFor(model => model.LoginName)
+                    <br />
+                    @Html.EditorFor(model => model.LoginName)
+
+                    <br />
+                    @Html.LabelFor(model => model.Password)
+                    <br />
+                    @Html.EditorFor(model => model.Password)
+
+
+                    <input class="menuBtns" type="submit" value="Войти" />
+                    <input class="menuBtns" type="button" value="Нет аккаунта?" onclick="showLoginMenu(false)" />
+                    <input class="menuBtns" type="button" value="В главное меню" onclick="goToThePageForBtns('\Home/Index')" />
+
+                    <a class="menuBtns" asp-action="Registration" asp-controller="LogIn"> Нет аккаунта? </a>
+
+
+
+
+                </form>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

@@ -57,12 +57,19 @@
     border-radius: 5px;
     box-shadow: none;
     border: 2px solid #212121;
+    text-decoration: none;
+    color: black;
 }
 
 #startMenu .menuBtns {
     width: 265px;
     height: 32px;
 }
+
+
+
+
+
     
         
 

@@ -20,13 +20,19 @@ namespace WebWordGame.Controllers
             _dataBaseContext = dataBaseContext;
         }
 
-        
-        public ActionResult Index()
+       
+
+        public ActionResult Login()
         {
             return View();
         }
 
-        
+        public ActionResult Registration()
+        {
+            return View();
+        }
+
+
         [HttpGet]
         public ActionResult Create()
         {
@@ -35,10 +41,11 @@ namespace WebWordGame.Controllers
         [HttpPost]
         public ActionResult Create(PersonModel person)
         {
+
             _dataBaseContext.people.Add(person);
             _dataBaseContext.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Registration");
         }
 
 

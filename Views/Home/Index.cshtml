@@ -9,10 +9,10 @@
 
 <div id="main">
 
-    <div style="text-align:center" name="startMenu">
+    <div style="text-align:center" name="startMenu" id="startMenu">
 
         <div id="startBtns">
-            <input class="menuBtns" type="button" value="Начать игру" onclick="showAuthTypeChoosing();">
+            <input class="menuBtns" type="button" value="Начать играть" onclick="showAuthTypeChoosing();">
             <br>
             <input class="menuBtns" type="button" value="Правила">
             <br>
@@ -22,9 +22,32 @@
         </div>
 
         <div id="authTypeChoosingBtns" style="display: none;">
-            <input class="menuBtns" type="button" value="Вход"> <!--asp-controller="LogIn" asp-action="Index" asp-route-logType="Login"-->
-            <br>
-            <input class="menuBtns" type="button" value="Регистрация"> <!--asp-controller="LogIn" asp-action="Index" asp-route-logType="Registration"-->
+            Для начала игры необходимо войти
+             <div>
+                
+
+                <a style="text-decoration: none;" asp-action="Login" asp-controller="LogIn">
+                    <div class="menuBtns">
+                        Вход
+                    </div>
+                </a>
+
+                <a style="text-decoration: none;" asp-action="Registration" asp-controller="LogIn">
+                    <div class="menuBtns">
+                        Регистрация
+                    </div>
+                </a>
+            </div>
+
+            <!-- <a style="text-decoration: none; padding-bottom:55px;" asp-action="Login" asp-controller="LogIn"><div class="menuBtns">Вход </div></a>
+
+    <div class="menuBtns">
+        <a style="text-decoration: none; margin-bottom:55px;" asp-action="Login" asp-controller="LogIn"> Вход </a>
+    </div>
+
+    <div class="menuBtns">
+        <a style="text-decoration: none;" asp-action="Registration" asp-controller="LogIn"> Регистрация </a>
+    </div>-->
         </div>
 
         <div id="gameTypeChoosing" style="display: none;">
@@ -44,6 +67,9 @@
             <br>
             <input class="menuBtns" type="button" value="Назад" onclick="showGameTypeChoosingMenu();">
         </div>
+
+
+        
 
     </div>
 </div>
