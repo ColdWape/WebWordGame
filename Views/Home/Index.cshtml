@@ -1,6 +1,4 @@
 ﻿
-
-
 @{
     ViewBag.Title = "The Word Game";
 }
@@ -12,43 +10,19 @@
     <div style="text-align:center" name="startMenu" id="startMenu">
 
         <div id="startBtns">
-            <input class="menuBtns" type="button" value="Начать играть" onclick="showAuthTypeChoosing();">
+            <a asp-action="GameTypeChoosingPage" asp-controller="Home" class="menuBtns">Начать играть</a>
+            
             <br>
             <input class="menuBtns" type="button" value="Правила">
             <br>
             <input class="menuBtns" type="button" value="Помощь">
             <br>
             <input class="menuBtns" type="button" value="Reports">
+
+
         </div>
 
-        <div id="authTypeChoosingBtns" style="display: none;">
-            Для начала игры необходимо войти
-             <div>
-                
-
-                <a style="text-decoration: none;" asp-action="Login" asp-controller="LogIn">
-                    <div class="menuBtns">
-                        Вход
-                    </div>
-                </a>
-
-                <a style="text-decoration: none;" asp-action="Registration" asp-controller="LogIn">
-                    <div class="menuBtns">
-                        Регистрация
-                    </div>
-                </a>
-            </div>
-
-            <!-- <a style="text-decoration: none; padding-bottom:55px;" asp-action="Login" asp-controller="LogIn"><div class="menuBtns">Вход </div></a>
-
-    <div class="menuBtns">
-        <a style="text-decoration: none; margin-bottom:55px;" asp-action="Login" asp-controller="LogIn"> Вход </a>
-    </div>
-
-    <div class="menuBtns">
-        <a style="text-decoration: none;" asp-action="Registration" asp-controller="LogIn"> Регистрация </a>
-    </div>-->
-        </div>
+        
 
         <div id="gameTypeChoosing" style="display: none;">
             <a href="#"><input class="menuBtns" type="button" value="Играть против компьютера"></a>
@@ -69,7 +43,7 @@
         </div>
 
 
-        
+
 
     </div>
 </div>

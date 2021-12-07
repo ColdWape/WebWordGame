@@ -54,6 +54,63 @@ function goToThePageForBtns(inputLink) {
 }
 
 
+function checkShowPasswordVisibility() {
+    var $revealEye = $(this).parent().find(".reveal-eye");
+    if (this.value) {
+        $revealEye.addClass("is-visible");
+    } else {
+        $revealEye.removeClass("is-visible");
+    }
+}
+
+$(document).ready(function () {
+    var txtPassword = document.getElementById('Password');
+    //var $hideAndSeekPassword = document.getElementById('hideAndSeekPasswordBlock');
+    var $revealEye = $('<div class="reveal-eye"></div>')
+    $(document.getElementById('forEyeBlock')).append($revealEye);
+    $(txtPassword).on("keyup", checkShowPasswordVisibility)
+    var revealEyeCondition = document.getElementsByClassName("reveal-eye");
+    var showPassStatus = document.getElementById("TextForShowPass");
+    var hidePassStatus = document.getElementById("TextForHidePass");
+    $revealEye.on({
+        mousedown: function () {
+            if (txtPassword.getAttribute("type") == "text") {
+                txtPassword.setAttribute("type", "password");
+                //revealEyeCondition.style.background = background: url(C:\Users\ТАНКИСТ\source\repos\WebWordGame\wwwroot\images\ClosePass.png) 50% 50% no-repeat;
+                showPassStatus.style.display ='block';
+                hidePassStatus.style.display = 'none';
+
+            }
+            else {
+                txtPassword.setAttribute("type", "text");
+                //revealEyeCondition.style.background = background: url(C:\Users\ТАНКИСТ\source\repos\WebWordGame\wwwroot\images\OpenPass.png) 50% 50% no-repeat;
+                showPassStatus.style.display = 'none';
+                hidePassStatus.style.display = 'block';
+
+            }
+        },
+        /*mouseup: function () {
+            txtPassword.setAttribute("type", "password");
+        }
+       /* mouseout: function () {
+            txtPassword.setAttribute("type", "password");
+        }*/
+    });
+})
+
+
+/*
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+document.getElementById("eyee").addEventListener("click", function (e) {
+    var pwd = document.getElementById("Password");
+    if (pwd.getAttribute("type") == "password") {
+        pwd.setAttribute("type", "text");
+    } else {
+        pwd.setAttribute("type", "password");
+    }
+});*/
+
 
 /*
 //Проверка введенных данных при регистрации

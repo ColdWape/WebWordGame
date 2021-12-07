@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,15 @@ namespace WebWordGame
 
             services.AddDbContext<DataBaseContext>(options => 
                                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/LogIn/Login");
+                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/LogIn/Login");
+                });
+
+            services.AddControllersWithViews();
         }
 
         
@@ -45,11 +55,16 @@ namespace WebWordGame
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=LogIn}/{action=Registration}/{id?}");
+                    //pattern: "{controller=LogIn}/{action=Registration}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
             });
         }
     }

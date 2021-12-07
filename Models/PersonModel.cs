@@ -10,15 +10,29 @@ namespace WebWordGame.Models
     {
         public int Id { get; set; }
 
-        [Display(Name = "Логин")]
         
         public string LoginName { get; set; }
 
-        [Display(Name = "Почтовый адрес")]
+        
         public string Email { get; set; }
 
-        [Display(Name = "Пароль")]
+        
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "Минимальная длина пароля 8 символов")]
+        
         public string Password { get; set; }
 
+
+        public int? RoleId { get; set; }
+        public Role Role { get; set; }
+    }
+    public class Role
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<PersonModel> Users { get; set; }
+        public Role()
+        {
+            Users = new List<PersonModel>();
+        }
     }
 }

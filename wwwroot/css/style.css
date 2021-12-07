@@ -36,10 +36,30 @@
     padding: 20px;
     border: solid black;
     border-radius: 25px;
+    width:550px;
     max-width: 550px;
 }
 
-    #logInForm .text-box {
+    #logInForm .inputBlock {
+        background-color: #4B4B4B;
+        width: 95%;
+        font-size: 20pt;
+        margin-left: 4px;
+        margin-right: 6px;
+        border-radius: 10px;
+    }
+
+        #logInForm .inputBlock:focus {
+            outline: none !important;
+        }
+    #logInForm li {
+        color: azure;
+        font-size: 19px;
+        font-weight: normal;
+        
+        list-style-type: none;
+    }
+    /*#logInForm #Password {
         background-color: #414141;
         width: 95%;
         font-size: 20pt;
@@ -48,9 +68,20 @@
         border-radius: 10px;
     }
 
-        #logInForm .text-box:focus {
+        #logInForm #Password:focus {
             outline: none !important;
-        }
+        }*/
+
+.formForBtns {
+   width: 100%;
+   font-size: 0pt;
+}
+.formBtns {
+    width: 100%;
+    font-size: 22pt;
+}
+
+
 .menuBtns {
     background-color: #414141;
     font-size: 14pt;
@@ -65,10 +96,40 @@
     width: 265px;
     height: 32px;
 }
+.attention-text {
+    color: azure;
+    font-size: 19px;
+    font-weight: normal;
+    text-align: center;
+}
 
 
+.reveal-eye {
+    /*position: relative;*/
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /*position: absolute;*/
+    /*right: 1px;
+    top: 1px;
+    bottom: 1px;*/
+    z-index: 2;
+    width: 22px;
+    height: 18px;
+    background-image: url('file:///C:\Users\ТАНКИСТ\source\repos\WebWordGame\wwwroot\images\0_EUATjPegSR1mFzl5.jpeg');
+    cursor: pointer;
+    visibility: visible;
+    opacity: 1;
+    /*transition: opacity .2s ease 0s, visibility 0s linear .2s;*/
+}
 
-
+    .reveal-eye.is-visible {
+        display: block;
+        visibility: visible;
+        opacity: 1;
+        transition: opacity .2s ease 0s, visibility 0s linear 0s;
+    }
 
     
         
