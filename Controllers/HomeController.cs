@@ -22,6 +22,8 @@ namespace WebWordGame.Controllers
 
         public IActionResult Index()
         {
+            
+
             return View();
         }
 

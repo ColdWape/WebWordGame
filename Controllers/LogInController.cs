@@ -45,7 +45,7 @@ namespace WebWordGame.Controllers
         //}
 
 
-
+        //Методы для регистрации
         [HttpGet]
         public IActionResult Registration()
         {
@@ -67,6 +67,8 @@ namespace WebWordGame.Controllers
                     if (userRole != null)
                         person.Role = userRole;
 
+                    ImageModel userImage = await _dataBaseContext.Images.FirstOrDefaultAsync(i => i.ImageSource == "../images/starting_profile_images/default_image.jpg");
+                    person.ProfileImageId = userImage;
                     _dataBaseContext.People.Add(person);
                     await _dataBaseContext.SaveChangesAsync();
 
@@ -93,6 +95,7 @@ namespace WebWordGame.Controllers
 
 
 
+        //Методы для входа 
 
         [HttpGet]
         public IActionResult Login()
@@ -114,14 +117,18 @@ namespace WebWordGame.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                
+
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
             return View(model);
         }
 
 
-
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index","Home");
+        }
 
 
 
@@ -134,7 +141,7 @@ namespace WebWordGame.Controllers
             // создаем один claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, person.Email),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, person.LoginName),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, person.Role?.Name)
             };
             // создаем объект ClaimsIdentity
@@ -145,5 +152,5 @@ namespace WebWordGame.Controllers
         }
     }
 
-        
+
 }

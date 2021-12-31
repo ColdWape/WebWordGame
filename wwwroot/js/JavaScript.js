@@ -65,7 +65,8 @@ function checkShowPasswordVisibility() {
 
 $(document).ready(function () {
     var txtPassword = document.getElementById('Password');
-    //var $hideAndSeekPassword = document.getElementById('hideAndSeekPasswordBlock');
+    //var txtConfirmPassword = document.getElementById('ConfirmPassword');
+
     var $revealEye = $('<div class="reveal-eye"></div>')
     $(document.getElementById('forEyeBlock')).append($revealEye);
     $(txtPassword).on("keyup", checkShowPasswordVisibility)
@@ -76,55 +77,32 @@ $(document).ready(function () {
         mousedown: function () {
             if (txtPassword.getAttribute("type") == "text") {
                 txtPassword.setAttribute("type", "password");
-                //revealEyeCondition.style.background = background: url(C:\Users\ТАНКИСТ\source\repos\WebWordGame\wwwroot\images\ClosePass.png) 50% 50% no-repeat;
-                showPassStatus.style.display ='block';
+                //txtConfirmPassword.setAttribute("type", "password");
+
+                revealEyeCondition[0].style.backgroundImage = "url('../images/OpennPass.png')";
+
+                showPassStatus.style.display = 'block';
                 hidePassStatus.style.display = 'none';
 
             }
             else {
                 txtPassword.setAttribute("type", "text");
-                //revealEyeCondition.style.background = background: url(C:\Users\ТАНКИСТ\source\repos\WebWordGame\wwwroot\images\OpenPass.png) 50% 50% no-repeat;
+                //txtConfirmPassword.setAttribute("type", "text");
+
+                revealEyeCondition[0].style.backgroundImage = "url('../images/ClosePass.png')";
+
                 showPassStatus.style.display = 'none';
                 hidePassStatus.style.display = 'block';
 
             }
         },
-        /*mouseup: function () {
-            txtPassword.setAttribute("type", "password");
-        }
-       /* mouseout: function () {
-            txtPassword.setAttribute("type", "password");
-        }*/
+        
     });
 })
 
 
-/*
-
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-document.getElementById("eyee").addEventListener("click", function (e) {
-    var pwd = document.getElementById("Password");
-    if (pwd.getAttribute("type") == "password") {
-        pwd.setAttribute("type", "text");
-    } else {
-        pwd.setAttribute("type", "password");
-    }
-});*/
-
-
-/*
-//Проверка введенных данных при регистрации
-
-var nameBox = document.getElementById("LoginName");
-var emailBox = document.getElementById("Email");
-var passwordBox = document.getElementById("Password");
-var secondPasswordBox = document.getElementById("checkPassword");
-var registerForm = document.getElementById("registrationForm");
-registerForm.addEventListener('submit', function (event) {
-
-    if (nameBox.nodeValue == "") {
-        nameBox.nodeValue = "ПОЛЕ";
-    event.preventDefault();
-    return false;
-}
-});*/
+//Выбор изображения
+//function showImagesMenu() {
+//    var choosingPhotoMenu = document.getElementsByClassName("choosingPhoto");
+//    choosingPhotoMenu[0].style.display = 'inline';
+//}

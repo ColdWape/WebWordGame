@@ -9,38 +9,56 @@
 
     <div style="text-align:center" name="startMenu" id="startMenu">
 
-        <div id="startBtns">
-            <a asp-action="GameTypeChoosingPage" asp-controller="Home" class="menuBtns">Начать играть</a>
-            
-            <br>
-            <input class="menuBtns" type="button" value="Правила">
-            <br>
-            <input class="menuBtns" type="button" value="Помощь">
-            <br>
-            <input class="menuBtns" type="button" value="Reports">
 
 
-        </div>
+        @if (ViewContext.HttpContext.User.IsInRole("person"))
+        {
 
-        
 
-        <div id="gameTypeChoosing" style="display: none;">
-            <a href="#"><input class="menuBtns" type="button" value="Играть против компьютера"></a>
-            <br>
-            <input class="menuBtns" type="button" value="Играть против игроков" onclick="showGameQuantityPeopleChoosing()">
-            <br>
-            <input class="menuBtns" type="button" value="Назад" onclick="showMainMenu();">
-        </div>
+            <a asp-action="GameTypeChoosingPage" asp-controller="Home" class="menuBtns formBtns">Начать играть</a>
+            <a asp-action="UserPage" asp-controller="Profile" class="menuBtns formBtns">Профиль</a>
 
-        <div id="gameQuantityPeopleChoosing" style="display: none;">
-            <input class="menuBtns" type="button" value="Играть против одного игрока">
+            <input class="menuBtns formBtns" type="button" value="Рейтинг">
+
+            <input class="menuBtns formBtns" type="button" value="Правила">
             <br>
-            <input class="menuBtns" type="button" value="Играть против двух игроков">
+            <input class="menuBtns formBtns" type="button" value="Помощь">
             <br>
-            <input class="menuBtns" type="button" value="Играть против трех игроков">
+            <input class="menuBtns formBtns" type="button" value="Reports">
             <br>
-            <input class="menuBtns" type="button" value="Назад" onclick="showGameTypeChoosingMenu();">
-        </div>
+        }
+        else if (ViewContext.HttpContext.User.IsInRole("admin"))
+        {
+            <a asp-action="GameTypeChoosingPage" asp-controller="Home" class="menuBtns formBtns">Начать играть</a>
+            <a asp-action="UserPage" asp-controller="Profile" class="menuBtns formBtns">Профиль</a>
+
+            <input class="menuBtns formBtns" type="button" value="Рейтинг">
+
+            <input class="menuBtns formBtns" type="button" value="Правила">
+            <br>
+            <input class="menuBtns formBtns" type="button" value="Помощь">
+            <br>
+            <input class="menuBtns formBtns" type="button" value="Reports">
+            <br>
+            <br>
+            <input class="menuBtns formBtns" type="button" value="Заявки">
+            <br>
+            <input class="menuBtns formBtns" type="button" value="Отчеты">
+        }
+        else
+        {
+            <div id="startBtns">
+                <a asp-action="GameTypeChoosingPage" asp-controller="Home" class="menuBtns formBtns">Начать играть</a>
+                <input class="menuBtns formBtns" type="button" value="Рейтинг">
+
+                <input class="menuBtns formBtns" type="button" value="Правила">
+
+            </div>
+        }
+
+
+
+
 
 
 

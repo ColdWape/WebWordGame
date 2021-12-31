@@ -36,6 +36,7 @@ namespace WebWordGame
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/LogIn/Login");
                     options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/LogIn/Login");
+                    options.Cookie.MaxAge = TimeSpan.FromDays(7);
                 });
 
             services.AddControllersWithViews();

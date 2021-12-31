@@ -24,8 +24,13 @@
     <link rel="shortcut icon" href="~/images/0_EUATjPegSR1mFzl5.jpeg" type="image/x-icon">
 </head>
 <body>
+    @*@if (ViewContext.HttpContext.User.IsInRole("kl") || ViewContext.) { 
+    <div id="NameInCorner">
+         
+    </div>
+    }*@
 
-    @RenderBody()
+        @RenderBody()
 
 
 

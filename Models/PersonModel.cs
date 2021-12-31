@@ -21,10 +21,17 @@ namespace WebWordGame.Models
         
         public string Password { get; set; }
 
+        //public int ProfileImageId { get; set; }
+        //public ImageModel ProfileImageId { get; set; }
 
         public int? RoleId { get; set; }
         public Role Role { get; set; }
+
+        public ImageModel ProfileImageId { get; set; }
+
     }
+
+
     public class Role
     {
         public int Id { get; set; }

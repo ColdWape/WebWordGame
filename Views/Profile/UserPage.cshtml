@@ -1,0 +1,110 @@
+﻿@model WebWordGame.Models.PersonModel
+    <link href="~/css/userInfo.css" rel="stylesheet" />
+
+
+<div class="mainUserUnfo">
+    <div class="blockUserInfo">
+        <div class="namePhotoAndStatus">
+
+            <div class="userPhotoBlock">
+                <img src="@ViewBag.Human.ProfileImageId.ImageSource" />
+                @*<img src="~/images/starting_profile_images/default_image.jpg" />*@
+                <button onclick="showImagesMenu()">Сменить изображение</button>
+            </div>
+
+            <div class="nameAndStatus">
+
+                <div class="userName">
+                    @ViewBag.Human.LoginName
+                    @*                    ReiFararei*@
+                </div>
+
+                <div class="userStatus">
+                    Новичок
+                </div>
+
+            </div>
+
+            <form asp-action="Logout" asp-controller="LogIn" asp-anti-forgery="true">
+
+                <input class="menuBtns logoutBtn" type="submit" value="Выйти" />
+            </form>
+        </div>
+
+
+
+        <form asp-action="UserPage" asp-controller="Profile" class="choosingPhoto" method="post">
+            <div class="PhotoCollection">
+                @foreach (var item in ViewBag.UserAvatar)
+                {
+
+                    <div class="oneOfChoosingImage">
+                        <label>
+
+                            <input type="radio" name="PictureId" value="@item.Id" width="50">
+                            <img src="@item.ImageSource" />
+                        </label>
+                    </div>
+                }
+            </div>
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <input class="choosingPhotoBtn acceptChoosingPhotoBtn" type="submit" value="Выбрать" />
+
+            <button class="choosingPhotoBtn cancelChoosingPhotoBtn" onclick="hideImagesMenu()">Отмена</button>
+        </form>
+
+        <table class="userInfoInTable">
+            <tr>
+                <td>
+                    <table class="firstSideInfoInTable">
+                        <tr>
+                            <td>Сыграно игр</td>
+                            <td>58</td>
+                        </tr>
+                        <tr>
+                            <td>Побед</td>
+                            <td>33</td>
+                        </tr>
+                        <tr>
+                            <td>Поражений</td>
+                            <td>25</td>
+                        </tr>
+                        <tr>
+                            <td>Набрано очков</td>
+                            <td>1500</td>
+                        </tr>
+
+
+                    </table>
+                </td>
+
+                <td>
+                    <table class="secondSideInfoInTable">
+                        <tr>
+                            <td style="font-size: calc(50px + 5vw);">57%</td>
+                        </tr>
+                        <tr>
+                            <td>Процент побед</td>
+                        </tr>
+                    </table>
+                </td>
+
+        </table>
+
+        
+    </div>
+</div>
+<script>
+    function showImagesMenu() {
+        var choosingPhotoMenu = document.getElementsByClassName("choosingPhoto");
+        choosingPhotoMenu[0].style.display = 'block';
+    }
+    function hideImagesMenu() {
+        var choosingPhotoMenu = document.getElementsByClassName("choosingPhoto");
+        choosingPhotoMenu[0].style.display = 'none';
+    }
+</script>

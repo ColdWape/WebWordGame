@@ -1,0 +1,226 @@
+﻿/*Настройки страницы профиля*/
+
+.mainUserUnfo {
+    /*text-align: center;*/
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+}
+
+.blockUserInfo {
+    width: 80%;
+    margin: 0 auto;
+    /*background: rgba(255,255,255,0.15);*/
+    /*position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;*/
+}
+
+.namePhotoAndStatus {
+    display: flex;
+    margin-top: 20px;
+    position: relative;
+}
+
+.userPhotoBlock {
+    min-height: 90px;
+    min-width: 90px;
+    width: calc(75px + 5vw);
+    height: calc(75px + 5vw);
+    overflow: hidden;
+    border: solid 5px;
+    position: relative;
+    border-radius: 100px;
+}
+
+    .userPhotoBlock img {
+        max-height: 105%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+
+    .userPhotoBlock button {
+        position: absolute;
+        background: white;
+        color: black;
+        width: 105%;
+        height: 105%;
+        cursor: pointer;
+        opacity: 0;
+        font-size: calc(7px + 1vw);
+        transform: translate(-50%,-50%);
+        top: 50%;
+        left: 50%;
+        transition-duration: 0.6s;
+    }
+
+        .userPhotoBlock button:hover {
+            opacity: 0.75;
+        }
+
+
+.nameAndStatus {
+    margin-left: 35px;
+    position: relative;
+
+}
+
+.userName {
+    font-size: calc(40px + 4vw);
+    font-weight: normal;
+    top: 10px;
+    left: 0px;
+    position: absolute;
+}
+
+.userStatus {
+    font-size: calc(12px + 1vw);
+    margin-top: -25px;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    font-weight: lighter;
+}
+
+/*Выбор изображения*/
+
+.choosingPhoto {
+    /*background: rgba(234,123,53,0.20);*/
+    background: rgba(255,255,255,0.15);
+    position: relative;
+    /*display: flex;
+    flex-wrap: wrap;*/
+    display: none;
+    border-radius: 40px;
+    position: fixed;
+    transform: translateY(-25px);
+    animation: ani 2s forwards;
+}
+
+@keyframes ani {
+    0% {
+        transform: translateY(-25px);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+.PhotoCollection {
+    /*background: rgba(234,123,53,0.20);*/
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.oneOfChoosingImage {
+    min-height: 40px;
+    min-width: 40px;
+    width: calc(50px + 6vw);
+    height: calc(50px + 6vw);
+    /*overflow: hidden;*/
+    /*border-radius: 100px;*/
+    position: relative;
+    /*margin-right: 30px;
+    margin-bottom: 15px;*/
+    margin: 15px 10px;
+}
+
+    .oneOfChoosingImage img {
+        max-height: 105%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        border-radius: 1000px;
+    }
+
+    .oneOfChoosingImage:hover {
+        opacity: 0.85;
+    }
+
+.choosingPhotoBtn {
+    position: absolute;
+    width: calc(90px + 7vw);
+    height: calc(25px + 1vw);
+    /*right: 50px;*/
+    bottom: 25px;
+    border-radius: 25px;
+    border: none;
+    opacity: 0.5;
+    /*background: rgb(31,117,254);*/
+    cursor: pointer;
+    font-size: calc(5px + 1vw);
+}
+
+    .choosingPhotoBtn:hover {
+        opacity: 0.8;
+    }
+
+.acceptChoosingPhotoBtn {
+    right: 300px;
+    background: rgb(31,117,254);
+}
+
+.cancelChoosingPhotoBtn {
+    right: 50px;
+    background: rgb(127,255,212);
+}
+/* HIDE RADIO */
+[type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+    /* IMAGE STYLES */
+    [type=radio] + img {
+        cursor: pointer;
+    }
+
+    /* CHECKED STYLES */
+    [type=radio]:checked + img {
+        outline: 3px solid #f00;
+    }
+
+
+.userInfoInTable {
+    font-size: calc(5px + 2.5vw);
+    border: none;
+    width: 100%;
+    font-weight: normal;
+    margin: 55px 0px 15px 15px;
+}
+
+.firstSideInfoInTable {
+    width: 80%
+}
+
+.secondSideInfoInTable {
+    text-align: center;
+    width: 100%;
+    margin-left: -20px;
+}
+
+.logoutBtn {
+    cursor: pointer;
+    right: calc(5px + 8vw);
+    height: calc(5px + 3vw);
+    width: calc(5px + 7vw);
+    position: absolute;
+    font-size: calc(5px + 1vw);
+}

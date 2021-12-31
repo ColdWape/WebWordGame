@@ -1,7 +1,11 @@
-﻿body {
-    background-color: #4B4B4B;
-    font-weight:bold;
+﻿
+body {
+    background: linear-gradient(90deg, rgba(170,0,0,1) 0%, rgba(1,59,145,1) 100%);
+    font-weight: bold;
+    color: #bfbfbf;
+    font-family: 'Sitka Heading';
 }
+
 
 #main {
     margin: 0;
@@ -11,6 +15,7 @@
     margin-right: -50%;
     transform: translate(-50%, -50%);
     font-size: 22pt;
+    
 }
 
 #helloWords {
@@ -34,20 +39,26 @@
 
 #logInForm {
     padding: 20px;
-    border: solid black;
     border-radius: 25px;
-    width:550px;
+    width: 550px;
     max-width: 550px;
 }
 
     #logInForm .inputBlock {
-        background-color: #4B4B4B;
-        width: 95%;
+        background: none;
+        width: 100%;
         font-size: 20pt;
         margin-left: 4px;
         margin-right: 6px;
-        border-radius: 10px;
+        border: none;
+        border-bottom: 1px solid white;
+        color: #bfbfbf;
+        /*border-radius: 10px;*/
     }
+    #logInForm input::placeholder {
+        color: rgba(255,255,255,0.25);
+    }
+
 
         #logInForm .inputBlock:focus {
             outline: none !important;
@@ -75,22 +86,34 @@
 .formForBtns {
    width: 100%;
    font-size: 0pt;
+   margin-top: 15px;
 }
 .formBtns {
-    width: 100%;
-    font-size: 22pt;
+    display: block; /* Ссылка как блочный элемент */
+    text-align: center; /* Выравнивание по центру */
+    width: 100%; /* Ширина на весь слой */
+    font-weight: normal;
+    padding: 0px;
+    cursor: pointer;
+    margin-bottom: 2px;
+    
 }
+
 
 
 .menuBtns {
-    background-color: #414141;
     font-size: 14pt;
     border-radius: 5px;
     box-shadow: none;
-    border: 2px solid #212121;
+    border: none;
     text-decoration: none;
-    color: black;
+    color: #bfbfbf;
+    background: rgba(255, 255, 255, 0.07);
+    
 }
+    .menuBtns:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
 
 #startMenu .menuBtns {
     width: 265px;
@@ -117,10 +140,13 @@
     z-index: 2;
     width: 22px;
     height: 18px;
-    background-image: url('file:///C:\Users\ТАНКИСТ\source\repos\WebWordGame\wwwroot\images\0_EUATjPegSR1mFzl5.jpeg');
+    background-image: url('../images/OpennPass.png');
     cursor: pointer;
     visibility: visible;
     opacity: 1;
+    background-position: top;
+    background-size: contain;
+    background-repeat: no-repeat;
     /*transition: opacity .2s ease 0s, visibility 0s linear .2s;*/
 }
 
@@ -132,5 +158,62 @@
     }
 
     
-        
 
+
+
+
+/*Настройка игрового поля*/
+
+.mainBattleBlock {
+    width: 85%;
+    margin: 0 auto;
+    /* display: flex; */
+    position: relative;
+    height: 100%;
+    min-width: 950px;
+}
+
+
+
+.userShortInfoBlock {
+    display: flex;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.photoInGame {
+    width: calc(15px + 5vw);
+    height: calc(15px + 5vw);
+}
+
+.nameAndStatusInGame {
+    margin-left: 5px;
+    position:relative;
+}
+.userNameInGame {
+    top: 0px;
+    font-size: calc(7px + 2vw);
+}
+
+.userStatusInGame {
+    top: calc(30px + 1vw);
+    font-size: calc(7px + 1vw);
+    margin-top: 0px;
+}
+
+.opponentShortInfoBlock {
+    right: 0;
+    left: auto;
+}
+
+.opponentNameInGame {
+    position: unset;
+}
+
+
+.battleFieldBlock{
+    width: 80%;
+    height:100%;
+
+}
