@@ -1,0 +1,149 @@
+﻿<link href="~/css/queueStyles.css" rel="stylesheet" />
+<section class="header">
+    <h1 style="font-size: 40px; margin-top: 15px;">Игровые комнаты</h1>
+    <ul class="headerBtnsList">
+        <li>
+            <button class="menuBtns headBtn" onclick="showCreateMenu()">Создать комнату</button>
+        </li>
+        <li>
+            <form asp-action="queue" asp-controller="game" method="get">
+                <button class="menuBtns headBtn" >Обновить комнаты</button>
+            </form>
+
+        </li>
+        <li>
+            <form asp-action="userpage" asp-controller="profile"  method="get">
+                <button class="menuBtns headBtn" >Профиль</button>
+            </form>
+
+        </li>
+        <li>
+            <form asp-action="index" asp-controller="home"  method="get">
+                <button class="menuBtns headBtn">Вернуться на главную</button>
+            </form>
+        </li>
+    </ul>
+
+</section>
+<section class="gameRooms">
+    <div class="infoAboutGamesBlock">
+        <table class="infoGameTable">
+            <tr>
+                <td class="firstColumnInInfoGame">Название</td>
+                <td class="secondColumnInInfoGame">Автор</td>
+                <td class="thirdColumnInInfoGame">Количество игроков</td>
+
+            </tr>
+        </table>
+
+    </div>
+
+
+    <form asp-action="JoinToTheGame" asp-controller="game" method="post" style="height:88%; overflow:overlay;">
+        @*Шаблоон*@
+        @*<label class="oneOfGames">
+            <input name="gameID" class="game-radio" type="radio" value="2" />
+            <div class="infoAboutGamesBlock game-details">
+                <table class="infoGameTable">
+                    <tr>
+                        <td class="firstColumnInInfoGame">Haleluyaaa</td>
+                        <td class="secondColumnInInfoGame">ReiFararei</td>
+                        <td class="thirdColumnInInfoGame">2/5</td>
+
+                    </tr>
+                </table>
+
+            </div>
+
+        </label>*@
+        @if (ViewBag.Games != null)
+        {
+            foreach (var item in ViewBag.Games)
+            {
+                <label class="oneOfGames">
+                    <input name="roomId" class="game-radio" type="radio" value="@item.Id" />
+                    <div class="infoAboutGamesBlock game-details">
+                        <table class="infoGameTable">
+                            <tr>
+                                <td class="firstColumnInInfoGame">@item.Name</td>
+                                <td class="secondColumnInInfoGame">@item.Creator</td>
+                                <td class="thirdColumnInInfoGame">
+                                    @item.People.Count / @item.MaximumNumbersOfGamers
+                                </td>
+
+                            </tr>
+                        </table>
+
+                    </div>
+
+                </label>
+            }
+        }
+        <input value="@User.Identity.Name" name="UserName" style="display: none" />
+        <input class="queuesSbmtBtn" type="submit" value="Присоединиться" />
+    </form>
+
+</section>
+
+    <!--<section class="createGameSection">
+        <div class="createGameBlock">-->
+
+            @*<h1>Создать игру</h1>
+            <form>
+                <label>Название</label>
+                <input name="gameName" type="text" autocomplete="off" />
+                <select name="quantityOfGamers">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <input type="button" value="sssssssssssss" />
+
+            </form>*@
+
+            
+        <!--</div>
+
+    </section>-->
+
+
+<section id="createGameSection">
+    <div class="createGameBlock">
+        <div class="createGameBackgrnd"></div>
+        <form class="createGameForm" asp-action="queue" asp-controller="game" method="post">
+            <h1 class="titleForCreateGame">Создать игру</h1>
+            <h2 style="margin-bottom: 5px;">Название</h2>
+
+            <input name="gameName" type="text" class="inputBlock" autocomplete="off" />
+
+            <div class="selectBlockInCreateGame">
+                <h2 style="margin-bottom: 5px;">Количество игроков</h2>
+                <select class="selectInCreateGame" name="quantityOfGamers">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            
+            <div class="selectBlockInCreateGame">
+                <input type="submit" class="menuBtns headBtn createGameBtns" value="Создать" />
+                <input type="button" class="menuBtns headBtn createGameBtns" value="Отмена" onclick="hideCreateMenu()" />
+
+            </div>
+        </form>
+    </div>
+</section>
+@*font-variant: diagonal-fractions;*@
+
+
+<script>
+    function showCreateMenu() {
+        document.getElementById("createGameSection").style.display = "block";
+    }
+
+    function hideCreateMenu() {
+        document.getElementById("createGameSection").style.display = "none";
+    }
+</script>

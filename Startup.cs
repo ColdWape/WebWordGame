@@ -28,6 +28,8 @@ namespace WebWordGame
         {
             services.AddControllersWithViews();
 
+            services.AddSignalR();
+
             services.AddDbContext<DataBaseContext>(options => 
                                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -59,12 +61,15 @@ namespace WebWordGame
             app.UseAuthentication();
             app.UseAuthorization();
 
+            
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chat");
+
                 endpoints.MapControllerRoute(
                     name: "default",
-                    //pattern: "{controller=LogIn}/{action=Registration}/{id?}");
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Game}/{action=queue}/{id?}");
 
             });
         }

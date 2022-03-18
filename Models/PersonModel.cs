@@ -29,6 +29,11 @@ namespace WebWordGame.Models
 
         public ImageModel ProfileImageId { get; set; }
 
+        public List<GameModel> Games { get; set; }
+
+        public List<RoomGamer> roomGamers { get; set; } = new List<RoomGamer>();
+
+
     }
 
 

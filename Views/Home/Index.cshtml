@@ -26,6 +26,9 @@
             <br>
             <input class="menuBtns formBtns" type="button" value="Reports">
             <br>
+            <form asp-action="queue" asp-controller="game">
+                <button class="menuBtns headBtn">Обновить комнаты</button>
+            </form>
         }
         else if (ViewContext.HttpContext.User.IsInRole("admin"))
         {

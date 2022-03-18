@@ -1,0 +1,143 @@
+﻿.mainTable {
+    width: 93%;
+    height: 89%;
+}
+
+
+.gamersBlock{
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    margin-top: 10px;
+}
+
+.theGamer {
+    width: 100%;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px;
+    border-radius: 60px;
+    display: flex;
+    overflow: hidden;
+}
+
+.gamersAvatarBlock{
+    height:100%;
+    width: auto;
+    border-radius: 800px;
+    overflow:hidden;
+    min-width:120px;
+}
+
+.gamersAvatar{
+    height:100%;
+    width:auto;
+
+}
+
+.nameAndStatus {
+    margin: auto 0px auto 10px;
+}
+
+.gamersName{
+    font-size: 40px;
+    white-space:nowrap;
+}
+.gamersRank{
+    font-size: 25px;
+}
+.gamersScore {
+    font-size: 18px;
+}
+
+.theGameBlock {
+    width: 98%;
+    height: 98%;
+    border-radius: 25px;
+    /*overflow: hidden;*/
+    margin: 10px;
+    /*position: relative;*/
+}
+
+.sendedWordsBlock {
+    width: 100%;
+    /*height: 96.5%;*/
+    /*height: 770px;*/
+    height: 75vh;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    /*display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    overflow: hidden;*/
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    overflow: overlay;
+}
+
+
+
+
+.sendedWord {
+    inline-size: max-content;
+    margin: 5px 10px;
+    padding: 5px;
+    border: 1px solid #ffffffe3;
+    border-radius: 10px;
+}
+
+.wordName {
+    font-size: 21px;
+}
+
+.opponentIsAuthor {
+    font-size: 13px;
+    color: #00e7ff;
+}
+
+
+
+.userWord {
+    margin-left:auto;
+}
+
+.userIsAuthor {
+    font-size: 13px;
+    text-align: right;
+    color: #00f13f;
+}
+
+
+.sendTheWordBlock {
+    width: 100%;
+    height: 25px;
+    /*position: absolute;*/
+    bottom: 0;
+    left: 0;
+    display: flex;
+}
+
+
+
+.typeTheWord {
+    width: 75%;
+    text-align: center;
+    background: none;
+    width: 100%;
+    font-size: 20px;
+    border: none;
+    border-bottom: 1px solid white;
+    color: #bfbfbf;
+}
+    .typeTheWord:focus {
+        outline: none !important;
+    }
+
+.sendTheWordBtn {
+    width: 25%;
+}
+
+

@@ -10,6 +10,8 @@ namespace WebWordGame.Models
     {
         [Display(Name = "Логин")]
         [Required(ErrorMessage = "Не указан логин")]
+        [MaxLength(10, ErrorMessage = "Максимальная длина логина 10 символов")]
+        [MinLength(3, ErrorMessage = "Минимальная дляна логина 3 символа")]
         [RegularExpression("[a-zA-Z-_0-9]*$", ErrorMessage = "Логин может содержать только латниские буквы, цифры, нижнее подчеркивание и дефис")]
         public string LoginName { get; set; }
 

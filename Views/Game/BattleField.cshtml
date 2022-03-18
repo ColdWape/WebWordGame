@@ -1,55 +1,232 @@
-﻿
-<div class="mainBattleBlock">
-    <div class="userShortInfoBlock">
-        <div class="userPhotoBlock photoInGame">
-            @*<img src="@ViewBag.Human.ProfileImageId.ImageSource" />*@
-            <img src="~/images/starting_profile_images/image_girl_with_skate.jpg" />
-        </div>
+﻿<link href="~/css/BattleFieldStyles.css" rel="stylesheet" />
+<link href="~/css/queueStyles.css" rel="stylesheet" />
 
-        <div class="nameAndStatusInGame">
+<table class="mainTable">
+    <thead>
+        <tr style="height:50px;">
+            <td width="25%">
+                <h1 style="margin:0;">Участники</h1>
+            </td>
+            <td style="text-align:right;">
+                @if (User.Identity.Name == ViewBag.Game.Creator)
+                {
+                    <button class="menuBtns headBtn">Начать игру</button>
 
-            <div class="userName userNameInGame" style="">
-                @*@ViewBag.Human.LoginName*@
-                ReiFararei
-            </div>
-            <br />
-            <div class="userStatus userStatusInGame">
-                Новичок
-            </div>
+                }
+                <button class="menuBtns headBtn">Покинуть игру</button>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="position:relative; min-width: 340px;">
+                <div class="gamersBlock">
 
-        </div>
-    </div>
+                    @foreach (var gamer in ViewBag.Game.roomGamers)
+                    {
+                        <div class="theGamer" name="@gamer.Person.LoginName">
+                            <div class="gamersAvatarBlock">
+                                @foreach (var photo in ViewBag.Photos)
+                                {
+                                    if (gamer.Person.ProfileImageId == photo)
+                                    {
+                                        <img class="gamersAvatar" src="@photo.ImageSource" />
+                                        break;
+                                    }
+                                }
+                            </div>
+                            <div class="nameAndStatus">
+                                <div class="gamersName">@gamer.Person.LoginName</div>
+                                <div class="gamersRank">Novice</div>
+                                <div class="gamersScore">Score: 1548</div>
+                            </div>
+                        </div>
+                    }
 
-    <div class="battleFieldBlock">
-        <form>
-            <div style="background: red;"></div>
-            <input type="text">
 
-            <input type="button">
-        </form>
-    </div>
-
-
-
-    <div class="opponentsBlock">
-        <div class="userShortInfoBlock opponentShortInfoBlock">
-            <div class="nameAndStatusInGame">
-
-                <div class="userName userNameInGame opponentNameInGame" style="">
-                    @*@ViewBag.Human.LoginName*@
-                    ReiFararei
+                    @*<div class="theGamer">
+                        <div class="gamersAvatarBlock">
+                            <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+                        </div>
+                        <div class="nameAndStatus">
+                            <div class="gamersName">ReiFarareiqqqqqqqqqqqqqq</div>
+                            <div class="gamersRank">Novice</div>
+                            <div class="gamersScore">Score: 1548</div>
+                        </div>
+                    </div>
+                    <div class="theGamer">
+                        <div class="gamersAvatarBlock">
+                            <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+                        </div>
+                        <div class="nameAndStatus">
+                            <div class="gamersName">№№№№№№№№№№</div>
+                            <div class="gamersRank">Novice</div>
+                            <div class="gamersScore">Score: 1504896</div>
+                        </div>
+                    </div>*@
                 </div>
-                <br />
-                <div class="userStatus userStatusInGame">
-                    Новичок
+            </td>
+            <td>
+                <div class="theGameBlock">
+                    <div class="sendedWordsBlock">
+
+                        <div class="sendedWord userWord">
+                            <div class="userIsAuthor">ReiFararei</div>
+                            <div class="wordName">karrramba</div>
+                        </div>
+                        <div class="sendedWord ">
+                            <div class="opponentIsAuthor">Qwerty</div>
+                            <div class="wordName">virus</div>
+                        </div>
+                        <div class="sendedWord ">
+                            <div class="opponentIsAuthor">Leembo</div>
+                            <div class="wordName">lilo</div>
+                        </div>
+                        <div class="sendedWord ">
+                            <div class="opponentIsAuthor">Timati</div>
+                            <div class="wordName">Akihabara</div>
+                        </div>
+                        <div class="sendedWord userWord">
+                            <div class="userIsAuthor">GriB</div>
+                            <div class="wordName">Breeeeedooom</div>
+                        </div>
+                        <div class="sendedWord">
+                            <div class="opponentIsAuthor">FrogoDiller</div>
+                            <div class="wordName">@ViewBag.gamezz</div>
+                        </div>
+                        <div class="sendedWord userWord">
+                            <div class="userIsAuthor">GriB</div>
+                            <div class="wordName">@ViewBag.gameId</div>
+                        </div>
+                        <div class="sendedWord">
+                            <div class="opponentIsAuthor">People</div>
+                            <div class="wordName">@ViewBag.Game.roomGamers.Count</div>
+
+                        </div>
+
+                    </div>
+                    <div class="sendTheWordBlock">
+                        <input name="test" id="test" type="text" class="typeTheWord inputBlock" placeholder="Поле для ввода слова" />
+                        <input type="button" value="send" class="menuBtns sendTheWordBtn" onclick="testAdd(test.value)" />
+                    </div>
                 </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-            </div>
-            <div class="userPhotoBlock photoInGame">
-                @*<img src="@ViewBag.Human.ProfileImageId.ImageSource" />*@
-                <img src="~/images/starting_profile_images/image_girl_with_skate.jpg" />
-            </div>
+<script>
+    function testAdd(word) {
+        var sendedWordsBlock = document.getElementsByClassName('sendedWordsBlock')[0];
+        var div = document.createElement("div");
+        div.classList.add('userWord');
+        div.classList.add('sendedWord');
 
-        </div>
-    </div>
-</div>
+        sendedWordsBlock.appendChild(div);
+
+        var author = document.createElement("div");
+        author.classList.add('userIsAuthor');
+        author.innerHTML = "meAuthor";
+
+        div.appendChild(author);
+
+        var text = document.createElement("div");
+        text.classList.add('wordName');
+        text.innerHTML = word;
+
+        div.appendChild(text);
+
+        document.getElementsByClassName('sendedWordsBlock')[0].scrollTop = document.getElementsByClassName('sendedWordsBlock')[0].scrollHeight;
+    }
+
+
+</script>
+<script src="~/js/gameScripts.js"></script>
+<script src="~/js/signalR/signalr.min.js"></script>
+<script>
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/chat")
+        .build();
+    //Штука, которая отвечает за подключение типочков
+
+    hubConnection.on('ShowNewPerson', function (name, photo) {
+
+
+        testAdd(name);
+
+
+
+        var gamerBlock = document.createElement('div');
+        gamerBlock.classList.add("theGamer");
+        gamerBlock.setAttribute("name", name);
+
+        var gamerAvatarBlock = document.createElement('div');
+        gamerAvatarBlock.classList.add("gamersAvatarBlock");
+
+        var gamerAvatar = document.createElement('img');
+        gamerAvatar.setAttribute("src", photo);
+        gamerAvatar.classList.add("gamersAvatar");
+
+        gamerAvatarBlock.appendChild(gamerAvatar);
+
+        gamerBlock.appendChild(gamerAvatarBlock);
+
+        var nameAndStatus = document.createElement('div');
+        nameAndStatus.classList.add("nameAndStatus");
+
+        var gamersName = document.createElement('div');
+        gamersName.classList.add("gamersName")
+        gamersName.innerHTML = name;
+
+        var gamersRank = document.createElement('div');
+        gamersRank.classList.add("gamersRank")
+        gamersRank.innerHTML = "Novice";
+
+
+        var gamersScore = document.createElement('div');
+        gamersScore.classList.add("gamersScore")
+        gamersScore.innerHTML = "Score: 145656";
+
+        nameAndStatus.appendChild(gamersName);
+        nameAndStatus.appendChild(gamersRank);
+        nameAndStatus.appendChild(gamersScore);
+
+        gamerBlock.appendChild(nameAndStatus);
+
+        document.getElementsByClassName("gamersBlock")[0].appendChild(gamerBlock);
+
+    });
+
+
+
+
+    hubConnection.on('HideDisconnectedUser', function (username) {
+
+        document.getElementsByName('username')[0].remove();
+
+    });
+
+    hubConnection.on("f", function (c) {
+        testAdd(c);
+    });
+
+
+    hubConnection.start();
+
+
+
+        //var timerBlock = $('.seconds');
+        //var num = 30; //количество секунд
+
+        //var index = num;
+        //var timerId = setInterval(function () {
+        //    timerBlock.html(--index);
+        //}, 1000);
+
+        //setTimeout(function () {
+        //    clearInterval(timerId);
+        //    $('#timerBlock').html('<button>hello!</button>')
+        //}, num * 1000);
+
+
+</script>

@@ -25,26 +25,6 @@ namespace WebWordGame.Controllers
         }
 
 
-
-        //[HttpPost]
-        //public IActionResult Registration(RegisterModel register)
-        //{
-        //    PersonModel enableUser = _dataBaseContext.People.FirstOrDefault(p => p.LoginName == register.LoginName);
-        //    if (enableUser.LoginName != null)
-        //    {
-        //        ModelState.AddModelError("LoginName", $"Пользователь с логином {enableUser.LoginName} уже зарегистрирован!"); //Спросить !
-        //    }
-        //    if (ModelState.IsValid)
-        //    {
-        //        _dataBaseContext.People.Add(register);
-        //        _dataBaseContext.SaveChanges();
-        //        return RedirectToAction("Login");
-        //    }
-        //    return View(register);
-
-        //}
-
-
         //Методы для регистрации
         [HttpGet]
         public IActionResult Registration()
@@ -66,6 +46,9 @@ namespace WebWordGame.Controllers
                     Role userRole = await _dataBaseContext.Roles.FirstOrDefaultAsync(r => r.Name == "person");
                     if (userRole != null)
                         person.Role = userRole;
+
+                    GameInfoModel quantityOfPeople = _dataBaseContext.GameInfo.First();
+                    quantityOfPeople.QuantityOfPlayers += 1;
 
                     ImageModel userImage = await _dataBaseContext.Images.FirstOrDefaultAsync(i => i.ImageSource == "../images/starting_profile_images/default_image.jpg");
                     person.ProfileImageId = userImage;
