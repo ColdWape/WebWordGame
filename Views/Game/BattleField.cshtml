@@ -7,13 +7,17 @@
             <td width="25%">
                 <h1 style="margin:0;">Участники</h1>
             </td>
-            <td style="text-align:right;">
+            <td style=" display: flex; justify-content: end;">
                 @if (User.Identity.Name == ViewBag.Game.Creator)
                 {
                     <button class="menuBtns headBtn">Начать игру</button>
 
                 }
-                <button class="menuBtns headBtn">Покинуть игру</button>
+            <form asp-action="LeaveFromGame" asp-controller="Game">
+                <input value="@User.Identity.Name" name="leaverName" style="display: none" />
+                <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
+                <button class="menuBtns headBtn" type="submit">Покинуть игру</button>
+            </form>
             </td>
         </tr>
     </thead>
@@ -68,6 +72,13 @@
             </td>
             <td>
                 <div class="theGameBlock">
+                    @*<div class="gameTimer">
+                        <div class="startTextBlock">
+                            <div class="startText">Ожидание начала игры</div>
+                        </div>
+                    </div>*@
+
+
                     <div class="sendedWordsBlock">
 
                         <div class="sendedWord userWord">
@@ -198,11 +209,17 @@
     });
 
 
+    hubConnection.on('autoLeaving', function () {
 
+        document.location.replace("https://localhost:5001/");
+
+        showCanceledGameMesage();
+
+    });
 
     hubConnection.on('HideDisconnectedUser', function (username) {
 
-        document.getElementsByName('username')[0].remove();
+        document.getElementsByName(username)[0].remove();
 
     });
 

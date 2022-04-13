@@ -60,23 +60,27 @@
         {
             foreach (var item in ViewBag.Games)
             {
-                <label class="oneOfGames">
-                    <input name="roomId" class="game-radio" type="radio" value="@item.Id" />
-                    <div class="infoAboutGamesBlock game-details">
-                        <table class="infoGameTable">
-                            <tr>
-                                <td class="firstColumnInInfoGame">@item.Name</td>
-                                <td class="secondColumnInInfoGame">@item.Creator</td>
-                                <td class="thirdColumnInInfoGame">
-                                    @item.People.Count / @item.MaximumNumbersOfGamers
-                                </td>
+                if (item.GameStatus == "Created")
+                {
+                    <label class="oneOfGames">
+                        <input name="roomId" class="game-radio" type="radio" value="@item.Id" />
+                        <div class="infoAboutGamesBlock game-details">
+                            <table class="infoGameTable">
+                                <tr>
+                                    <td class="firstColumnInInfoGame">@item.Name</td>
+                                    <td class="secondColumnInInfoGame">@item.Creator</td>
+                                    <td class="thirdColumnInInfoGame">
+                                        @item.People.Count / @item.MaximumNumbersOfGamers
+                                    </td>
 
-                            </tr>
-                        </table>
+                                </tr>
+                            </table>
 
-                    </div>
+                        </div>
 
-                </label>
+                    </label>
+                }
+
             }
         }
         <input value="@User.Identity.Name" name="UserName" style="display: none" />
@@ -135,6 +139,20 @@
         </form>
     </div>
 </section>
+
+<section id="canceledGameSection">
+    <div class="createGameBlock canceledGameBlock">
+        <div class="createGameBackgrnd"></div>
+        <div class="createGameForm">
+            <h1 class="titleForCreateGame">Игра была отменена создателем</h1>
+
+            <div class="selectBlockInCreateGame">
+                <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMesage()" style="margin: auto; width: 100%;" />
+            </div>
+        </div>
+    </div>
+</section>
+
 @*font-variant: diagonal-fractions;*@
 
 
@@ -145,5 +163,13 @@
 
     function hideCreateMenu() {
         document.getElementById("createGameSection").style.display = "none";
+    }
+
+    function hideCanceledGameMesage() {
+        document.getElementById("canceledGameSection").style.display = "none";
+    }
+
+    function showCanceledGameMesage() {
+        document.getElementById("canceledGameSection").style.display = "block";
     }
 </script>

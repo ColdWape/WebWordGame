@@ -15,6 +15,7 @@ namespace WebWordGame.Models
         public DbSet<MessageModel> Messages { get; set; }
         public DbSet<GameInfoModel> GameInfo { get; set; }
         public DbSet<RoomGamer> RoomGamers { get; set; }
+        public DbSet<WordModel> Words { get; set; }
 
 
         public DataBaseContext(DbContextOptions<DataBaseContext> dbContextOptions) 

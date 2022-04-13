@@ -93,33 +93,73 @@ namespace WebWordGame.Controllers
             return View();
         }
 
-       
+        
+        public IActionResult LeaveFromGame(string leaverName, int roomId)
+        {
+            GameModel game = _dataBaseContext.Games.Include(u => u.roomGamers).Include(p => p.People).FirstOrDefault(g => g.Id == roomId);
+
+            if (game.Creator == leaverName)
+            {
+                //foreach (var item in game.People)
+                //{
+
+                //    _hubContext.Clients.Group(Convert.ToString(item.Id)).SendAsync("autoLeaving");
+                //}
+                _hubContext.Clients.Group(Convert.ToString(roomId)).SendAsync("autoLeaving");
+                game.GameStatus = "Cancelled";
+                _dataBaseContext.SaveChanges();
+
+
+            }
+            return RedirectToAction("queue", "game");
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> JoinToTheGame(string UserName, int roomId)
         {
-            GameModel game = _dataBaseContext.Games.FirstOrDefault(g => g.Id == roomId);
+            GameModel game = _dataBaseContext.Games.Include(u => u.roomGamers).Include(p => p.People).FirstOrDefault(g => g.Id == roomId);
             PersonModel person = _dataBaseContext.People.FirstOrDefault(p => p.LoginName == UserName);
+            if (game.People.Count + 1 <= game.MaximumNumbersOfGamers)
+            {
+                game.People.Add(person);
+                _dataBaseContext.SaveChanges();
+                return RedirectToAction("battlefield", $"game", new { gameId = roomId });
 
-            game.People.Add(person);
-            _dataBaseContext.SaveChanges();
+            }
+
+
+
 
             //person = _dataBaseContext.People.Include(im => im.ProfileImageId).FirstOrDefault(p => p.LoginName == UserName);
 
+            //await _hubContext.Clients.All.SendAsync("ShowNewPerson", person.LoginName, person.ProfileImageId.ImageSource);
 
             ////await _hubContext.Groups.AddToGroupAsync(person.LoginName, Convert.ToString(game.Id));
 
             //ChatHub hub = new();
 
             //await hub.OnConnectedAsync();
-            
+
             ////await _hubContext.Clients.Group(Convert.ToString(game.Id)).SendAsync("ShowNewPerson", person.LoginName, person.ProfileImageId.ImageSource);
 
             ////await _hubContext.Clients.Groups(Convert.ToString(game.Id)).SendAsync("ShowNewPerson", person.LoginName, person.ProfileImageId.ImageSource);
 
+            return RedirectToAction("queue", "game");
 
-             return RedirectToAction("battlefield", $"game", new{ gameId = roomId });
-
+            //_hubContext.Clients.Caller("")
         }
-        
+
+
+        public IActionResult StartGame(string roomId)
+        {
+            Random rand = new Random();
+
+            WordModel firstWord =_dataBaseContext.Words.First(w => w.Id == rand.Next(1, _dataBaseContext.Words.Count()));
+
+            _hubContext.Clients.Group(roomId).SendAsync(firstWord.Name);
+
+            return NoContent();
+        }
     }
 }

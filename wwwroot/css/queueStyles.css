@@ -247,3 +247,33 @@
 .createGameBtns{
     margin:0;
 }
+
+
+
+#canceledGameSection {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    opacity: 0;
+    animation: canceledGameSection 0.5s forwards;
+}
+
+@keyframes canceledGameSection {
+
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.canceledGameBlock{
+    width: 450px;
+    height:150px;
+}
