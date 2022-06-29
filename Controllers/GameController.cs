@@ -38,7 +38,7 @@ namespace WebWordGame.Controllers
         }
 
 
-        
+
 
         [HttpGet]
         public IActionResult Queue()
@@ -65,16 +65,16 @@ namespace WebWordGame.Controllers
 
 
                 newGame.People.Add(person);
-                
+
 
 
                 _dataBaseContext.Games.Add(newGame);
                 _dataBaseContext.SaveChanges();
 
                 _hubContext.Groups.AddToGroupAsync(person.LoginName, Convert.ToString(newGame.Id));
-                
-                return RedirectToAction("battlefield", $"game", new{ gameId = newGame.Id});
-                
+
+                return RedirectToAction("battlefield", $"game", new { gameId = newGame.Id });
+
             }
 
             return View();
@@ -93,12 +93,12 @@ namespace WebWordGame.Controllers
             return View();
         }
 
-        
+
         public IActionResult LeaveFromGame(string leaverName, int roomId)
         {
             GameModel game = _dataBaseContext.Games.Include(u => u.roomGamers).Include(p => p.People).FirstOrDefault(g => g.Id == roomId);
 
-            if (game.Creator == leaverName)
+            if (game.Creator == leaverName && game.GameStatus == "Created")
             {
                 //foreach (var item in game.People)
                 //{
@@ -106,11 +106,13 @@ namespace WebWordGame.Controllers
                 //    _hubContext.Clients.Group(Convert.ToString(item.Id)).SendAsync("autoLeaving");
                 //}
                 _hubContext.Clients.Group(Convert.ToString(roomId)).SendAsync("autoLeaving");
-                game.GameStatus = "Cancelled";
+                //game.GameStatus = "Cancelled";
+                _dataBaseContext.Games.Remove(game);
                 _dataBaseContext.SaveChanges();
 
 
             }
+
             return RedirectToAction("queue", "game");
         }
 
@@ -120,7 +122,10 @@ namespace WebWordGame.Controllers
         {
             GameModel game = _dataBaseContext.Games.Include(u => u.roomGamers).Include(p => p.People).FirstOrDefault(g => g.Id == roomId);
             PersonModel person = _dataBaseContext.People.FirstOrDefault(p => p.LoginName == UserName);
-            if (game.People.Count + 1 <= game.MaximumNumbersOfGamers)
+
+            
+
+            if (game.People.Count + 1 <= game.MaximumNumbersOfGamers && game.GameStatus == "Created" )
             {
                 game.People.Add(person);
                 _dataBaseContext.SaveChanges();
@@ -128,6 +133,36 @@ namespace WebWordGame.Controllers
 
             }
 
+            //|| game.GameStatus == "Started" && game.roomGamers.FirstOrDefault(gamer => gamer.Person.LoginName == person.LoginName) != null
+
+            if (game.GameStatus == "Started" && game.roomGamers.FirstOrDefault(gamer => gamer.Person.LoginName == person.LoginName) != null)
+            {
+                return RedirectToAction("battlefield", $"game", new { gameId = roomId });
+            }
+
+
+            //_________________________________________________________
+            //Тестовое присоединение
+
+            //if (game.People.Count + 1 <= game.MaximumNumbersOfGamers)
+            //{
+            //    if (game.roomGamers.First(rg => rg.Person.LoginName == UserName) == null)
+            //    {
+            //        game.People.Add(person);
+            //        _dataBaseContext.SaveChanges();
+
+            //    }
+            //    else
+            //    {
+            //        game.roomGamers.First(rg => rg.Person.LoginName == UserName).ConnectedToTheGame = true;
+            //        _dataBaseContext.SaveChanges();
+            //    }
+
+            //    return RedirectToAction("battlefield", $"game", new { gameId = roomId });
+
+            //}
+
+            //_________________________________________________________
 
 
 
@@ -153,13 +188,229 @@ namespace WebWordGame.Controllers
 
         public IActionResult StartGame(string roomId)
         {
-            Random rand = new Random();
+            GameModel game = _dataBaseContext.Games.Include(u => u.roomGamers).Include(p => p.People).FirstOrDefault(g => g.Id == Convert.ToInt32(roomId));
+            if (game.roomGamers.Count > 1)
+            {
+                game.GameStatus = "Started";
+                game.StartTime = DateTime.Now;
 
-            WordModel firstWord =_dataBaseContext.Words.First(w => w.Id == rand.Next(1, _dataBaseContext.Words.Count()));
 
-            _hubContext.Clients.Group(roomId).SendAsync(firstWord.Name);
+                Random rand = new Random();
+                int temp = rand.Next(1, _dataBaseContext.Words.Count());
+                WordModel firstWord = _dataBaseContext.Words.First(w => w.Id == temp);
+
+                _hubContext.Clients.Group(roomId).SendAsync("OpponentWordAdd", firstWord.Name, "System");
+                _hubContext.Clients.Group(roomId).SendAsync("hideStartBtn");
+
+                _dataBaseContext.Messages.Add(new MessageModel
+                {
+                    TextMeassage = firstWord.Name,
+                    Sender = "System",
+                    Date = DateTime.Now,
+                    Game = game
+                }); ;
+
+                int OrderOfTheMove = 0;
+                foreach (var elem in game.roomGamers)
+                {
+                    OrderOfTheMove += 1;
+                    elem.OrderOfTheMove = OrderOfTheMove;
+                }
+
+                game.roomGamers.FirstOrDefault(order => order.OrderOfTheMove == 1).IsActive = true;
+                _dataBaseContext.SaveChanges();
+                
+                //_hubContext.Clients.Group(roomId).SendAsync("whoMustMove", game.roomGamers.FirstOrDefault(order => order.OrderOfTheMove == 1).Person.LoginName);
+                _hubContext.Clients.GroupExcept(Convert.ToString(game.Id), game.roomGamers.First(i => i.IsActive == true).ConnectId).SendAsync("whoMustMoveNoActiveGamer", game.roomGamers.First(i => i.IsActive == true).Person.LoginName);
+                _hubContext.Clients.Client(game.roomGamers.First(i => i.IsActive == true).ConnectId).SendAsync("whoMustMoveActiveGamer", game.roomGamers.First(i => i.IsActive == true).Person.LoginName);
+
+            }
+
+
 
             return NoContent();
         }
+
+
+        public IActionResult SendTheWord(string theWord, string username, int gameId, int timeLeft)
+        {
+            theWord = theWord.ToLower();
+            GameModel game = _dataBaseContext.Games.Include(u => u.roomGamers).Include(p => p.People).Include(w => w.Messages).FirstOrDefault(g => g.Id == gameId);
+            string gamerId = game.roomGamers.FirstOrDefault(n => n.Person.LoginName == username).ConnectId;
+            if (game.GameStatus == "Started")
+            {
+
+
+                string theLastWord = game.Messages.OrderByDescending(i => i.Id).First().TextMeassage;
+                RoomGamer activeGamer = null;
+                foreach (var item in game.roomGamers)
+                {
+                    if (item.IsActive)
+                    {
+                        //activeGamer = item.Person.LoginName;
+                        activeGamer = item;
+                        break;
+                    }
+                }
+
+                if (username == activeGamer.Person.LoginName)
+                {
+                    WordModel word = _dataBaseContext.Words.FirstOrDefault(w => w.Name == theWord);
+                    if (word != null)
+                    {
+                        if (game.Messages.FirstOrDefault(w => w.TextMeassage == theWord) == null)
+                        {
+                            if (theLastWord[theLastWord.Length - 1] == theWord[0] ||
+                                theLastWord[theLastWord.Length - 1] == 'ь' && theLastWord[theLastWord.Length - 2] == theWord[0] ||
+                                theLastWord[theLastWord.Length - 1] == 'ы' && theLastWord[theLastWord.Length - 2] == theWord[0] ||
+                                theLastWord[theLastWord.Length - 1] == 'ъ' && theLastWord[theLastWord.Length - 2] == theWord[0])
+                            {
+                                _dataBaseContext.Messages.Add(new MessageModel
+                                {
+                                    TextMeassage = theWord,
+                                    Sender = username,
+                                    Date = DateTime.Now,
+                                    Game = game
+                                });
+
+                                
+
+                                word.NumberOfUses += 1;
+                                int startNumber = _dataBaseContext.Words.Sum(u => u.NumberOfUses);
+                                _dataBaseContext.GameInfo.First().QuantityOfUsedWords = startNumber;
+                                _dataBaseContext.SaveChanges();
+
+                                int quantityDivides = 0;
+                                //int startNumber = _dataBaseContext.GameInfo.First().QuantityOfUsedWords;
+                                //int startNumber = _dataBaseContext.Words.Sum(u => u.NumberOfUses);
+
+
+                                while (startNumber > 100)
+                                {
+                                    startNumber /= word.NumberOfUses;
+                                    quantityDivides += 1;
+                                }
+
+                                activeGamer.Score += quantityDivides * timeLeft / 10;
+                                _dataBaseContext.SaveChanges();
+
+                                _hubContext.Clients.GroupExcept(Convert.ToString(gameId), gamerId).SendAsync("OpponentWordAdd", theWord, username);
+                                _hubContext.Clients.Client(gamerId).SendAsync("UsersWordAdd", theWord, username);
+                                _hubContext.Clients.Group(Convert.ToString(gameId)).SendAsync("changeUserScore", username, activeGamer.Score);
+
+
+                                if (activeGamer.OrderOfTheMove + 1 <= game.roomGamers.Count)
+                                {
+                                    activeGamer.IsActive = false;
+                                    RoomGamer nextPlayerToMove = game.roomGamers.FirstOrDefault(swap => swap.OrderOfTheMove == activeGamer.OrderOfTheMove + 1);
+                                    nextPlayerToMove.IsActive = true;
+                                    _dataBaseContext.SaveChanges();
+                                    //_hubContext.Clients.Group(Convert.ToString(gameId)).SendAsync("whoMustMove", nextPlayerToMove.Person.LoginName);
+                                    _hubContext.Clients.GroupExcept(Convert.ToString(gameId), nextPlayerToMove.ConnectId).SendAsync("whoMustMoveNoActiveGamer", nextPlayerToMove.Person.LoginName);
+                                    _hubContext.Clients.Client(nextPlayerToMove.ConnectId).SendAsync("whoMustMoveActiveGamer", nextPlayerToMove.Person.LoginName);
+                                }
+                                else
+                                {
+                                    activeGamer.IsActive = false;
+                                    RoomGamer nextPlayerToMove = game.roomGamers.FirstOrDefault(swap => swap.OrderOfTheMove == 1);
+                                    nextPlayerToMove.IsActive = true;
+                                    _dataBaseContext.SaveChanges();
+                                    //_hubContext.Clients.Group(Convert.ToString(gameId)).SendAsync("whoMustMove", nextPlayerToMove.Person.LoginName);
+                                    _hubContext.Clients.GroupExcept(Convert.ToString(gameId), nextPlayerToMove.ConnectId).SendAsync("whoMustMoveNoActiveGamer", nextPlayerToMove.Person.LoginName);
+                                    _hubContext.Clients.Client(nextPlayerToMove.ConnectId).SendAsync("whoMustMoveActiveGamer", nextPlayerToMove.Person.LoginName);
+                                }
+
+                                //_hubContext.Clients.Group(Convert.ToString(gameId)).SendAsync("UsersWordAdd", theWord, username);
+                                //_hubContext.Clients.GroupExcept(Convert.ToString(gameId), activeGamerId).SendAsync("UsersWordAdd", theWord, username);
+                                //_hubContext.Clients.User(activeGamerId).SendAsync("OpponentWordAdd",  theWord, username);
+                            }
+                            else
+                            {
+                                //СЛОВО ДОЛЖНО НАЧИНАТЬСЯ НА БУКВУ Х
+                                if (theLastWord[theLastWord.Length - 1] == 'ь' ||
+                                    theLastWord[theLastWord.Length - 1] == 'ъ' ||
+                                    theLastWord[theLastWord.Length - 1] == 'ы')
+                                {
+                                    _hubContext.Clients.Client(gamerId).SendAsync("wordStartWithWrongLetter", theLastWord[theLastWord.Length - 2]);
+                                }
+                                else
+                                {
+                                    _hubContext.Clients.Client(gamerId).SendAsync("wordStartWithWrongLetter", theLastWord[theLastWord.Length - 1]);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            //СЛОВО БЫЛО ИСПОЛЬЗОВАНО
+                            _hubContext.Clients.Client(gamerId).SendAsync("wordHasBeenUsed");
+                        }
+                    }
+                    else
+                    {
+                        //ТАКОГО СЛОВА НЕ СУЩЕСТВУЕТ
+                        _hubContext.Clients.Client(gamerId).SendAsync("wordDoesntExist");
+                    }
+                }
+                else
+                {
+                    //_hubContext.Clients.User(gamerId).SendAsync("alert");
+                    _hubContext.Clients.Client(gamerId).SendAsync("queueMistake");
+                }
+            }
+            else if (game.GameStatus == "Created")
+            {
+                _hubContext.Clients.Client(gamerId).SendAsync("gameWasntStarted");
+
+            }
+            else
+            {
+                _hubContext.Clients.Client(gamerId).SendAsync("anotherMistakeWithSendingMessage");
+            }
+            return NoContent();
+            
+
+        }
+
+
+
+
+        public IActionResult NextPlayer(string username, int gameId)
+        {
+            GameModel game = _dataBaseContext.Games.Include(u => u.roomGamers).Include(p => p.People).Include(w => w.Messages).FirstOrDefault(g => g.Id == gameId);
+
+            RoomGamer gamer = _dataBaseContext.RoomGamers.FirstOrDefault(f => f.Person.LoginName == username);
+
+            if (gamer.OrderOfTheMove + 1 <= game.roomGamers.Count)
+            {
+                gamer.IsActive = false;
+                RoomGamer nextPlayerToMove = game.roomGamers.FirstOrDefault(swap => swap.OrderOfTheMove == gamer.OrderOfTheMove + 1);
+                nextPlayerToMove.IsActive = true;
+                _dataBaseContext.SaveChanges();
+                _hubContext.Clients.GroupExcept(Convert.ToString(gameId), nextPlayerToMove.ConnectId).SendAsync("whoMustMoveNoActiveGamer", nextPlayerToMove.Person.LoginName);
+                _hubContext.Clients.Client(nextPlayerToMove.ConnectId).SendAsync("whoMustMoveActiveGamer", nextPlayerToMove.Person.LoginName);
+
+            }
+            else
+            {
+                gamer.IsActive = false;
+                RoomGamer nextPlayerToMove = game.roomGamers.FirstOrDefault(swap => swap.OrderOfTheMove == 1);
+                nextPlayerToMove.IsActive = true;
+                _dataBaseContext.SaveChanges();
+                //_hubContext.Clients.Group(Convert.ToString(gameId)).SendAsync("whoMustMoveNoActiveGamer", nextPlayerToMove.Person.LoginName);
+                _hubContext.Clients.GroupExcept(Convert.ToString(gameId), nextPlayerToMove.ConnectId).SendAsync("whoMustMoveNoActiveGamer", nextPlayerToMove.Person.LoginName);
+                _hubContext.Clients.Client(nextPlayerToMove.ConnectId).SendAsync("whoMustMoveActiveGamer", nextPlayerToMove.Person.LoginName);
+            }
+
+            return NoContent();
+        }
+
+
+        public IActionResult TimeSender(string gameId, string sendSeconds)
+        {
+            _hubContext.Clients.Group(gameId).SendAsync("changeTimeByActiveGamer", sendSeconds);
+            return NoContent();
+        }
+
     }
 }

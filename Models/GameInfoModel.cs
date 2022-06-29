@@ -11,6 +11,7 @@ namespace WebWordGame.Models
         public int Id { get; set; }
         public int QuantityOfGames { get; set; }
         public int QuantityOfPlayers { get; set; }
+        public int QuantityOfUsedWords { get; set; }
         public int CurrentlyOnline { get; set; }
         public int PeopleInQueue { get; set; }
 

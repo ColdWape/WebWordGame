@@ -9,9 +9,10 @@ namespace WebWordGame.Models
     {
         public int Id { get; set; }
         public string TextMeassage { get; set; }
+        public string Sender { get; set; }
 
-        public string Date = DateTime.Now.ToShortTimeString();
-
+        public DateTime Date { get; set; }
         public GameModel Game { get; set; }
+
     }
 }

@@ -1,23 +1,34 @@
 ﻿<link href="~/css/BattleFieldStyles.css" rel="stylesheet" />
 <link href="~/css/queueStyles.css" rel="stylesheet" />
-
+<script src="~/js/Timer.js"></script>
 <table class="mainTable">
     <thead>
         <tr style="height:50px;">
             <td width="25%">
                 <h1 style="margin:0;">Участники</h1>
             </td>
+            <td width="40%" style="text-align: center">
+                <h1 style="margin:0;" id="showWhoMustMove"></h1>
+            </td>
+            <td width="10%" style="text-align: center">
+                <h1 style="margin:0;" class="seconds"></h1>
+            </td>
             <td style=" display: flex; justify-content: end;">
                 @if (User.Identity.Name == ViewBag.Game.Creator)
                 {
-                    <button class="menuBtns headBtn">Начать игру</button>
+                    <form asp-action="StartGame" asp-controller="Game" id="startGameBtn">
+                        <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
+                        <button class="menuBtns headBtn" type="submit">Начать игру</button>
+                    </form>
 
                 }
-            <form asp-action="LeaveFromGame" asp-controller="Game">
-                <input value="@User.Identity.Name" name="leaverName" style="display: none" />
-                <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
-                <button class="menuBtns headBtn" type="submit">Покинуть игру</button>
-            </form>
+                <form asp-action="LeaveFromGame" asp-controller="Game">
+                    <input value="@User.Identity.Name" name="leaverName" style="display: none" />
+                    <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
+                    <button class="menuBtns headBtn" type="submit">Покинуть игру</button>
+                </form>
+                <button class="menuBtns headBtn" type="button" onclick="stop()">stop</button>
+
             </td>
         </tr>
     </thead>
@@ -41,42 +52,42 @@
                             </div>
                             <div class="nameAndStatus">
                                 <div class="gamersName">@gamer.Person.LoginName</div>
-                                <div class="gamersRank">Novice</div>
-                                <div class="gamersScore">Score: 1548</div>
+                                <div class="gamersRank">Счет: 0</div>
+                                <div class="gamersScore">&#9825; &#9825; &#9825;</div>
                             </div>
                         </div>
                     }
 
 
                     @*<div class="theGamer">
-                        <div class="gamersAvatarBlock">
-                            <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+                            <div class="gamersAvatarBlock">
+                                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+                            </div>
+                            <div class="nameAndStatus">
+                                <div class="gamersName">ReiFarareiqqqqqqqqqqqqqq</div>
+                                <div class="gamersRank">Novice</div>
+                                <div class="gamersScore">Score: 1548</div>
+                            </div>
                         </div>
-                        <div class="nameAndStatus">
-                            <div class="gamersName">ReiFarareiqqqqqqqqqqqqqq</div>
-                            <div class="gamersRank">Novice</div>
-                            <div class="gamersScore">Score: 1548</div>
-                        </div>
-                    </div>
-                    <div class="theGamer">
-                        <div class="gamersAvatarBlock">
-                            <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
-                        </div>
-                        <div class="nameAndStatus">
-                            <div class="gamersName">№№№№№№№№№№</div>
-                            <div class="gamersRank">Novice</div>
-                            <div class="gamersScore">Score: 1504896</div>
-                        </div>
-                    </div>*@
+                        <div class="theGamer">
+                            <div class="gamersAvatarBlock">
+                                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+                            </div>
+                            <div class="nameAndStatus">
+                                <div class="gamersName">№№№№№№№№№№</div>
+                                <div class="gamersRank">Novice</div>
+                                <div class="gamersScore">Score: 1504896</div>
+                            </div>
+                        </div>*@
                 </div>
             </td>
-            <td>
+            <td colspan="3">
                 <div class="theGameBlock">
                     @*<div class="gameTimer">
-                        <div class="startTextBlock">
-                            <div class="startText">Ожидание начала игры</div>
-                        </div>
-                    </div>*@
+                            <div class="startTextBlock">
+                                <div class="startText">Ожидание начала игры</div>
+                            </div>
+                        </div>*@
 
 
                     <div class="sendedWordsBlock">
@@ -107,7 +118,7 @@
                         </div>
                         <div class="sendedWord userWord">
                             <div class="userIsAuthor">GriB</div>
-                            <div class="wordName">@ViewBag.gameId</div>
+                            <div class="wordName"></div>
                         </div>
                         <div class="sendedWord">
                             <div class="opponentIsAuthor">People</div>
@@ -116,44 +127,114 @@
                         </div>
 
                     </div>
-                    <div class="sendTheWordBlock">
-                        <input name="test" id="test" type="text" class="typeTheWord inputBlock" placeholder="Поле для ввода слова" />
-                        <input type="button" value="send" class="menuBtns sendTheWordBtn" onclick="testAdd(test.value)" />
-                    </div>
+                    @*<div class="sendTheWordBlock">  *@
+                    <form asp-action="SendTheWord" asp-controller="Game" class="sendTheWordBlock">
+                        <input name="theWord" id="theWord" type="text" class="typeTheWord inputBlock" placeholder="Поле для ввода слова" />
+                        <input name="username" id="forTakeUsername" value="@User.Identity.Name" style="display:none" />
+                        <input name="gameId" value="@ViewBag.gameId" style="display:none" />
+                        <input name="timeLeft" id="timeLeft" value="0" @*style="display:none"*@ />
+
+                        <input type="submit" value="send" class="menuBtns sendTheWordBtn" />
+                    </form>
+                    @*</div>*@
                 </div>
             </td>
         </tr>
     </tbody>
 </table>
 
+<section id="canceledGameSection">
+    <div class="createGameBlock canceledGameBlock">
+        <div class="createGameBackgrnd"></div>
+        <div class="createGameForm">
+            <h1 class="titleForCreateGame">Игра была отменена создателем</h1>
+
+            <div class="selectBlockInCreateGame">
+                <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMesage()" style="margin: auto; width: 100%;" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<form style="display: none" asp-action="NextPlayer" asp-controller="Game">
+    <input name="gameId" value="@ViewBag.gameId" style="display:none" />
+    <input name="username" value="@User.Identity.Name" style="display:none" />
+    <input type="submit" value="send" style="display:none" class="menuBtns sendTheWordBtnc sendNextUserForm" />
+</form>
+
+<form style="display: none" asp-action="TimeSender" asp-controller="Game">
+    <input name="gameId" value="@ViewBag.gameId" style="display:none" />
+    <input name="sendSeconds" id="sendSeconds" value="10" style="display:none" />
+    <input type="submit" value="send" style="display:none" class="sendTheTime" />
+</form>
+<audio controls="controls" id="lowTimeAudio">
+    <source src="~/sounds/lowTime.mp3" type="audio/mpeg" autoplay="autoplay"/>
+</audio>
 <script>
-    function testAdd(word) {
-        var sendedWordsBlock = document.getElementsByClassName('sendedWordsBlock')[0];
-        var div = document.createElement("div");
-        div.classList.add('userWord');
-        div.classList.add('sendedWord');
+    //function UsersWordAdd(word) {
+    //    var sendedWordsBlock = document.getElementsByClassName('sendedWordsBlock')[0];
+    //    var div = document.createElement("div");
+    //    div.classList.add('userWord');
+    //    div.classList.add('sendedWord');
 
-        sendedWordsBlock.appendChild(div);
+    //    sendedWordsBlock.appendChild(div);
 
-        var author = document.createElement("div");
-        author.classList.add('userIsAuthor');
-        author.innerHTML = "meAuthor";
+    //    var author = document.createElement("div");
+    //    author.classList.add('userIsAuthor');
+    //    author.innerHTML = author;
 
-        div.appendChild(author);
+    //    div.appendChild(author);
 
-        var text = document.createElement("div");
-        text.classList.add('wordName');
-        text.innerHTML = word;
+    //    var text = document.createElement("div");
+    //    text.classList.add('wordName');
+    //    text.innerHTML = word;
 
-        div.appendChild(text);
+    //    div.appendChild(text);
 
-        document.getElementsByClassName('sendedWordsBlock')[0].scrollTop = document.getElementsByClassName('sendedWordsBlock')[0].scrollHeight;
-    }
+    //    document.getElementsByClassName('sendedWordsBlock')[0].scrollTop = document.getElementsByClassName('sendedWordsBlock')[0].scrollHeight;
+    //}
+
+    //function OpponentWordAdd(word, author) {
+    //    var sendedWordsBlock = document.getElementsByClassName('sendedWordsBlock')[0];
+    //    var div = document.createElement("div");
+    //    div.classList.add('userWord');
+    //    div.classList.add('sendedWord');
+
+    //    sendedWordsBlock.appendChild(div);
+
+    //    var author = document.createElement("div");
+    //    author.classList.add('opponentIsAuthor');
+    //    author.innerHTML = author;
+
+    //    div.appendChild(author);
+
+    //    var text = document.createElement("div");
+    //    text.classList.add('wordName');
+    //    text.innerHTML = word;
+
+    //    div.appendChild(text);
+
+    //    document.getElementsByClassName('sendedWordsBlock')[0].scrollTop = document.getElementsByClassName('sendedWordsBlock')[0].scrollHeight;
+    //}
 
 
 </script>
 <script src="~/js/gameScripts.js"></script>
 <script src="~/js/signalR/signalr.min.js"></script>
+
+<script>
+
+    function hideCanceledGameMesage() {
+        document.location.replace("https://localhost:5001/");
+    }
+    function showCanceledGameMesage() {
+        document.getElementById("canceledGameSection").style.display = "block";
+    }
+    function stop() {
+        clearInterval(seconds_timer_id);
+
+    }
+</script>
 <script>
     const hubConnection = new signalR.HubConnectionBuilder()
         .withUrl("/chat")
@@ -161,11 +242,6 @@
     //Штука, которая отвечает за подключение типочков
 
     hubConnection.on('ShowNewPerson', function (name, photo) {
-
-
-        testAdd(name);
-
-
 
         var gamerBlock = document.createElement('div');
         gamerBlock.classList.add("theGamer");
@@ -191,12 +267,12 @@
 
         var gamersRank = document.createElement('div');
         gamersRank.classList.add("gamersRank")
-        gamersRank.innerHTML = "Novice";
+        gamersRank.innerHTML = "Счёт: 0";
 
 
         var gamersScore = document.createElement('div');
         gamersScore.classList.add("gamersScore")
-        gamersScore.innerHTML = "Score: 145656";
+        gamersScore.innerHTML = "&#9825; &#9825; &#9825;";
 
         nameAndStatus.appendChild(gamersName);
         nameAndStatus.appendChild(gamersRank);
@@ -211,7 +287,6 @@
 
     hubConnection.on('autoLeaving', function () {
 
-        document.location.replace("https://localhost:5001/");
 
         showCanceledGameMesage();
 
@@ -223,10 +298,161 @@
 
     });
 
-    hubConnection.on("f", function (c) {
-        testAdd(c);
+
+    hubConnection.on('hideStartBtn', function () {
+
+        document.getElementById("startGameBtn").remove();
+
     });
 
+    hubConnection.on("UsersWordAdd", function (word, sender) {
+        var sendedWordsBlock = document.getElementsByClassName('sendedWordsBlock')[0];
+        var div = document.createElement("div");
+        div.classList.add('userWord');
+        div.classList.add('sendedWord');
+
+        sendedWordsBlock.appendChild(div);
+
+        var author = document.createElement("div");
+        author.classList.add('userIsAuthor');
+        author.innerHTML = sender;
+
+        div.appendChild(author);
+
+        var text = document.createElement("div");
+        text.classList.add('wordName');
+        text.innerHTML = word;
+
+        div.appendChild(text);
+
+        document.getElementsByClassName('sendedWordsBlock')[0].scrollTop = document.getElementsByClassName('sendedWordsBlock')[0].scrollHeight;
+    });
+
+    hubConnection.on("OpponentWordAdd", function (word, sender) {
+        var sendedWordsBlock = document.getElementsByClassName('sendedWordsBlock')[0];
+        var div = document.createElement("div");
+        div.classList.add('sendedWord');
+
+        sendedWordsBlock.appendChild(div);
+
+        var author = document.createElement("div");
+        author.classList.add('opponentIsAuthor');
+        author.innerHTML = sender;
+
+        div.appendChild(author);
+
+        var text = document.createElement("div");
+        text.classList.add('wordName');
+        text.innerHTML = word;
+
+        div.appendChild(text);
+
+        document.getElementsByClassName('sendedWordsBlock')[0].scrollTop = document.getElementsByClassName('sendedWordsBlock')[0].scrollHeight;
+    });
+
+    hubConnection.on("queueMistake", function () {
+        alert("Сейчас не Ваша очередь")
+    });
+    hubConnection.on("wordStartWithWrongLetter", function (requiredLetter) {
+        alert("Слово должно начинаться на букву " + requiredLetter)
+    });
+    hubConnection.on("wordHasBeenUsed", function () {
+        alert("Слово уже было исользовано")
+    });
+    hubConnection.on("wordDoesntExist", function () {
+        alert("Такого слова не существует")
+    });
+    hubConnection.on("gameWasntStarted", function () {
+        alert("Дождись начала игры")
+    });
+    hubConnection.on("anotherMistakeWithSendingMessage", function () {
+        alert("Ошибка")
+    });
+
+
+
+    hubConnection.on("whoMustMoveNoActiveGamer", function (username) {
+
+        //$("#timeLeft").val('10');
+        //$(".seconds").text('10');
+        document.getElementById("showWhoMustMove").innerHTML = "Ход игрока " + username;
+        clearInterval(seconds_timer_id);
+        seconds = 10;
+
+
+        if (document.getElementById('forTakeUsername').value != username) {
+
+
+            //clearInterval(seconds_timer_id);
+            //seconds = 10;
+            //var seconds_timer_id = setInterval(function () {
+
+            //    if (seconds > 0) {
+
+            //        seconds--;
+            //        $(".seconds").text(seconds);
+
+            //    } else {
+            //        clearInterval(seconds_timer_id);
+
+            //    }
+            //}, 1000);
+        }
+
+
+    });
+
+    hubConnection.on("whoMustMoveActiveGamer", function (username) {
+
+        document.getElementById("showWhoMustMove").innerHTML = "Ход игрока " + username;
+        timerTest(username);
+
+        ////$("#timeLeft").val('10');
+        ////$(".seconds").text('10');
+        //if (document.getElementById('forTakeUsername').value == username) {
+
+
+
+        //    seconds = 10;
+
+        //    var seconds_timer_id = setInterval(function () {
+
+        //        if (seconds > 0) {
+        //            $("#sendSeconds").val(seconds);
+        //            $("#timeLeft").val(seconds);
+
+        //            document.querySelector('.sendTheTime').click();
+
+        //            seconds--;
+
+        //            //$(".seconds").text(seconds);
+
+        //        } else {
+
+
+        //            clearInterval(seconds_timer_id);
+        //            document.querySelector('.sendNextUserForm').click();
+        //        }
+        //    }, 1000);
+        //}
+    });
+
+    hubConnection.on("changeTimeByActiveGamer", function (number) {
+        $(".seconds").text(number);
+    });
+
+
+
+
+
+
+
+
+
+    hubConnection.on("changeUserScore", function (user, score) {
+        userBlock = document.getElementsByName(user)[0];
+        userBlock.getElementsByClassName("gamersRank")[0].innerHTML = "Счет: " + score;
+    });
 
     hubConnection.start();
 

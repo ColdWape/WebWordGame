@@ -16,6 +16,7 @@ namespace WebWordGame.Models
 
         public string GameCreated = DateTime.Now.ToShortTimeString() + " " + DateTime.Now.ToShortDateString();
 
+        public DateTime StartTime { get; set; }
         public string GameEnded { get; set; }
         public string GameLifeTime { get; set; }
         public string GameStatus { get; set; }
@@ -33,6 +34,13 @@ namespace WebWordGame.Models
         public PersonModel Person { get; set; }
 
         public int Position { get; set; }
+        public bool IsActive { get; set; }
+        public int TimeToMove { get; set; }
+        public string ConnectId { get; set; }
+        public int OrderOfTheMove { get; set; }
+        public int Score { get; set; }
+        public bool ConnectedToTheGame { get; set; }
+
     }
 
 }

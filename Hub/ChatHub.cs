@@ -24,11 +24,16 @@ namespace WebWordGame
         //public async Task AddToTheGroup(PersonModel usermodel, string groupname, string image)
         public override async Task OnConnectedAsync()
         {
+
+
+
+
             var userName = Context.User.Identity.Name;
             PersonModel person = _dataBaseContext.People.Include(gamez => gamez.Games).Include(ph => ph.ProfileImageId).FirstOrDefault(u => u.LoginName == userName);
 
+
             string groupname = null;
-            foreach (var item in person.Games)
+            foreach (var item in person.Games.OrderByDescending(i => i.Id))
             {
                 if (item.GameStatus != "Ended")
                 {
@@ -37,9 +42,12 @@ namespace WebWordGame
                 }
             }
 
-            
-            var connectionId = Context.ConnectionId;
 
+            var connectionId = Context.ConnectionId;
+            RoomGamer roomGamer = _dataBaseContext.RoomGamers.First(i => i.Person == person);
+            roomGamer.ConnectedToTheGame = true;
+            roomGamer.ConnectId = connectionId;
+            _dataBaseContext.SaveChanges();
             if (groupname != null)
             {
                 await Groups.AddToGroupAsync(connectionId, groupname);
@@ -56,7 +64,7 @@ namespace WebWordGame
             //game.People.Add(person);
             //_dataBaseContext.SaveChanges();
 
-            await Clients.GroupExcept(groupname, connectionId).SendAsync("ShowNewPerson",person.LoginName, person.ProfileImageId.ImageSource);
+            await Clients.GroupExcept(groupname, connectionId).SendAsync("ShowNewPerson", person.LoginName, person.ProfileImageId.ImageSource);
             await Clients.All.SendAsync("f", connectionId);
             await base.OnConnectedAsync();
         }
@@ -68,9 +76,8 @@ namespace WebWordGame
             //{
             //    await base.OnDisconnectedAsync(exception);
             //}
-
-            var userName = Context.User.Identity.Name;
             
+            var userName = Context.User.Identity.Name;
             PersonModel person = _dataBaseContext.People.Include(gamez => gamez.Games).FirstOrDefault(u => u.LoginName == userName);
 
             string groupname = null;
@@ -89,14 +96,22 @@ namespace WebWordGame
             {
                 await Groups.RemoveFromGroupAsync(connectionId, groupname);
 
+                RoomGamer roomGamer = _dataBaseContext.RoomGamers.First(i => i.Person == person);
+                roomGamer.ConnectedToTheGame = false;
+
+                //GameModel game = _dataBaseContext.Games.FirstOrDefault(i => i.Id == Convert.ToInt32(groupname));
+                //if (game != null)
+                //{
+                //    game.People.Remove(person);
+                //}
+
+                await Clients.GroupExcept(groupname, connectionId).SendAsync("HideDisconnectedUser", person.LoginName);
 
             }
 
-            GameModel game = _dataBaseContext.Games.FirstOrDefault(i => i.Id == Convert.ToInt32(groupname));
-            game.People.Remove(person);
+
             _dataBaseContext.SaveChanges();
 
-            await Clients.GroupExcept(groupname, connectionId).SendAsync("HideDisconnectedUser", person.LoginName);
 
             await base.OnDisconnectedAsync(exception);
         }
@@ -162,9 +177,9 @@ namespace WebWordGame
         //    //await Clients.Group(groupname).SendAsync("ShowNewPerson", usermodel.LoginName, usermodel.ProfileImageId.ImageSource);
 
         //}
-         
 
-        
+
+
 
 
         //public async Task UpdateUsersAsync()

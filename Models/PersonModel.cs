@@ -32,6 +32,7 @@ namespace WebWordGame.Models
         public List<GameModel> Games { get; set; }
 
         public List<RoomGamer> roomGamers { get; set; } = new List<RoomGamer>();
+        public int LastVisitedRoom { get; set; }
 
 
     }

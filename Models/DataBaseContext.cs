@@ -76,10 +76,20 @@ namespace WebWordGame.Models
                j =>
                {
                    j.Property(pt => pt.Position).HasDefaultValue(null);
+                   j.Property(pt => pt.IsActive).HasDefaultValue(false);
+                   j.Property(pt => pt.TimeToMove).HasDefaultValue(30);
+                   j.Property(pt => pt.ConnectId).HasDefaultValue(null);
+                   j.Property(pt => pt.OrderOfTheMove).HasDefaultValue(null);
+                   j.Property(pt => pt.Score).HasDefaultValue(0);
+                   j.Property(pt => pt.ConnectedToTheGame).HasDefaultValue(false);
                    j.HasKey(t => new { t.GameId, t.PersonId });
                    j.ToTable("RoomGamers");
-               });
+               }
 
+               
+               );
+
+            modelBuilder.Entity<WordModel>().Property(p => p.NumberOfUses).HasDefaultValue(1);
             base.OnModelCreating(modelBuilder);
         }
     }
