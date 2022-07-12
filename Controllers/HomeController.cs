@@ -27,10 +27,6 @@ namespace WebWordGame.Controllers
             return View();
         }
 
-        [Authorize(Roles = "admin, person")]
-        public IActionResult GameTypeChoosingPage()
-        {
-            return View();
-        }
+       
     }
 }

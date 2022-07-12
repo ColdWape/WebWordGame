@@ -1,5 +1,5 @@
 ﻿@model WebWordGame.Models.PersonModel
-    <link href="~/css/userInfo.css" rel="stylesheet" />
+<link href="~/css/userInfo.css" rel="stylesheet" />
 
 
 <div class="mainUserUnfo">
@@ -16,24 +16,30 @@
 
                 <div class="userName">
                     @ViewBag.Human.LoginName
-                    @*                    ReiFararei*@
                 </div>
 
-                <div class="userStatus">
+                @*<div class="userStatus">
                     Новичок
-                </div>
+                </div>*@
 
             </div>
+            <div class="profileLeaveBtns">
+                <a asp-action="index" asp-controller="home">
+                    <input class="menuBtns logoutBtn" type="submit" value="На главную" />
+                </a>
+                <a asp-action="queue" asp-controller="game">
+                    <input class="menuBtns logoutBtn" type="submit" value="К списку игр" />
+                </a>
+                <form asp-action="Logout" asp-controller="LogIn" asp-anti-forgery="true">
+                    <input class="menuBtns logoutBtn" type="submit" value="Выйти" />
+                </form>
+            </div>
 
-            <form asp-action="Logout" asp-controller="LogIn" asp-anti-forgery="true">
-
-                <input class="menuBtns logoutBtn" type="submit" value="Выйти" />
-            </form>
         </div>
 
 
 
-        <form asp-action="UserPage" asp-controller="Profile" class="choosingPhoto" method="post">
+        <form asp-action="userpage" asp-controller="profile" class="choosingPhoto" method="post">
             <div class="PhotoCollection">
                 @foreach (var item in ViewBag.UserAvatar)
                 {
@@ -63,21 +69,23 @@
                     <table class="firstSideInfoInTable">
                         <tr>
                             <td>Сыграно игр</td>
-                            <td>58</td>
+                            <td>@ViewBag.Human.Games.Count</td>
                         </tr>
                         <tr>
                             <td>Побед</td>
-                            <td>33</td>
+                            <td>@ViewBag.Human.QuantityOfWins</td>
                         </tr>
                         <tr>
-                            <td>Поражений</td>
-                            <td>25</td>
+                            <td>Набрано очков за все время</td>
+                            <td>@ViewBag.Human.TotalScore</td>
                         </tr>
                         <tr>
-                            <td>Набрано очков</td>
-                            <td>1500</td>
+                            <td colspan="2">
+                                <a asp-action="allplayedgames" asp-controller="profile">
+                                    <input class="menuBtns gamesHystoryBtn"  type="submit" value="История игр" />
+                                </a>
+                            </td>
                         </tr>
-
 
                     </table>
                 </td>
@@ -85,17 +93,18 @@
                 <td>
                     <table class="secondSideInfoInTable">
                         <tr>
-                            <td style="font-size: calc(50px + 5vw);">57%</td>
+                            <td style="font-size: calc(50px + 5vw);">
+                                @ViewBag.Percent%
+                            </td>
                         </tr>
                         <tr>
                             <td>Процент побед</td>
                         </tr>
                     </table>
                 </td>
-
+            </tr>
         </table>
 
-        
     </div>
 </div>
 <script>

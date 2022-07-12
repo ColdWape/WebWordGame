@@ -7,18 +7,18 @@
         </li>
         <li>
             <form asp-action="queue" asp-controller="game" method="get">
-                <button class="menuBtns headBtn" >Обновить комнаты</button>
+                <button class="menuBtns headBtn">Обновить комнаты</button>
             </form>
 
         </li>
         <li>
-            <form asp-action="userpage" asp-controller="profile"  method="get">
-                <button class="menuBtns headBtn" >Профиль</button>
+            <form asp-action="userpage" asp-controller="profile" method="get">
+                <button class="menuBtns headBtn">Профиль</button>
             </form>
 
         </li>
         <li>
-            <form asp-action="index" asp-controller="home"  method="get">
+            <form asp-action="index" asp-controller="home" method="get">
                 <button class="menuBtns headBtn">Вернуться на главную</button>
             </form>
         </li>
@@ -42,20 +42,20 @@
     <form asp-action="JoinToTheGame" asp-controller="game" method="post" style="height:88%; overflow:overlay;">
         @*Шаблоон*@
         @*<label class="oneOfGames">
-            <input name="gameID" class="game-radio" type="radio" value="2" />
-            <div class="infoAboutGamesBlock game-details">
-                <table class="infoGameTable">
-                    <tr>
-                        <td class="firstColumnInInfoGame">Haleluyaaa</td>
-                        <td class="secondColumnInInfoGame">ReiFararei</td>
-                        <td class="thirdColumnInInfoGame">2/5</td>
+                <input name="gameID" class="game-radio" type="radio" value="2" />
+                <div class="infoAboutGamesBlock game-details">
+                    <table class="infoGameTable">
+                        <tr>
+                            <td class="firstColumnInInfoGame">Haleluyaaa</td>
+                            <td class="secondColumnInInfoGame">ReiFararei</td>
+                            <td class="thirdColumnInInfoGame">2/5</td>
 
-                    </tr>
-                </table>
+                        </tr>
+                    </table>
 
-            </div>
+                </div>
 
-        </label>*@
+            </label>*@
         @if (ViewBag.Games != null)
         {
             foreach (var item in ViewBag.Games)
@@ -70,13 +70,17 @@
                                     <td class="firstColumnInInfoGame">@item.Name</td>
                                     <td class="secondColumnInInfoGame">@item.Creator</td>
                                     <td class="thirdColumnInInfoGame">
-                                        @item.People.Count / @item.MaximumNumbersOfGamers
+                                        @*@item.People.Count\@item.roomGamers.ConnectedToTheGame*@ @item.quantityOfConnectedPeoples/ @item.MaximumNumbersOfGamers
                                     </td>
 
+
                                 </tr>
+
                             </table>
 
+
                         </div>
+
 
                     </label>
                 }
@@ -89,27 +93,26 @@
 
 </section>
 
-    <!--<section class="createGameSection">
-        <div class="createGameBlock">-->
+<!--<section class="createGameSection">
+    <div class="createGameBlock">-->
+@*<h1>Создать игру</h1>
+    <form>
+        <label>Название</label>
+        <input name="gameName" type="text" autocomplete="off" />
+        <select name="quantityOfGamers">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <input type="button" value="sssssssssssss" />
 
-            @*<h1>Создать игру</h1>
-            <form>
-                <label>Название</label>
-                <input name="gameName" type="text" autocomplete="off" />
-                <select name="quantityOfGamers">
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                <input type="button" value="sssssssssssss" />
+    </form>*@
 
-            </form>*@
 
-            
-        <!--</div>
+<!--</div>
 
-    </section>-->
+</section>-->
 
 
 <section id="createGameSection">
@@ -130,7 +133,7 @@
                     <option value="5">5</option>
                 </select>
             </div>
-            
+
             <div class="selectBlockInCreateGame">
                 <input type="submit" class="menuBtns headBtn createGameBtns" value="Создать" />
                 <input type="button" class="menuBtns headBtn createGameBtns" value="Отмена" onclick="hideCreateMenu()" />
@@ -141,17 +144,17 @@
 </section>
 
 @*<section id="canceledGameSection">
-    <div class="createGameBlock canceledGameBlock">
-        <div class="createGameBackgrnd"></div>
-        <div class="createGameForm">
-            <h1 class="titleForCreateGame">Игра была отменена создателем</h1>
+        <div class="createGameBlock canceledGameBlock">
+            <div class="createGameBackgrnd"></div>
+            <div class="createGameForm">
+                <h1 class="titleForCreateGame">Игра была отменена создателем</h1>
 
-            <div class="selectBlockInCreateGame">
-                <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMesage()" style="margin: auto; width: 100%;" />
+                <div class="selectBlockInCreateGame">
+                    <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMesage()" style="margin: auto; width: 100%;" />
+                </div>
             </div>
         </div>
-    </div>
-</section>*@
+    </section>*@
 
 @*font-variant: diagonal-fractions;*@
 
@@ -165,7 +168,6 @@
         document.getElementById("createGameSection").style.display = "none";
     }
 
-    
 
-    
+
 </script>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebWordGame.Controllers;
 
 namespace WebWordGame.Models
 {
@@ -24,7 +25,6 @@ namespace WebWordGame.Models
             Database.EnsureCreated();
             if (!Images.Any())
             {
-                Images.Add(new ImageModel { ImageSource = "../images/starting_profile_images/OpenPass.png" });
                 Images.Add(new ImageModel { ImageSource = "../images/starting_profile_images/image_anime_girl.jpg" });
                 Images.Add(new ImageModel { ImageSource = "../images/starting_profile_images/image_bodybilder.jpg" });
                 Images.Add(new ImageModel { ImageSource = "../images/starting_profile_images/image_girl_in_headphones.jpg" });
@@ -55,7 +55,7 @@ namespace WebWordGame.Models
             // добавляем роли
             Role adminRole = new Role { Id = 1, Name = adminRoleName };
             Role userRole = new Role { Id = 2, Name = userRoleName };
-            PersonModel adminUser = new PersonModel { Id = 1, LoginName = adminLogin, Password = adminPassword, RoleId = adminRole.Id };
+            PersonModel adminUser = new PersonModel { Id = 1, LoginName = adminLogin, Password = Crypto.Hash(adminPassword), RoleId = adminRole.Id };
 
             modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole });
             modelBuilder.Entity<PersonModel>().HasData(new PersonModel[] { adminUser });
@@ -75,7 +75,7 @@ namespace WebWordGame.Models
                    .HasForeignKey(pt => pt.GameId),
                j =>
                {
-                   j.Property(pt => pt.Position).HasDefaultValue(null);
+                   j.Property(pt => pt.IsWinner).HasDefaultValue(false);
                    j.Property(pt => pt.IsActive).HasDefaultValue(false);
                    j.Property(pt => pt.TimeToMove).HasDefaultValue(30);
                    j.Property(pt => pt.ConnectId).HasDefaultValue(null);

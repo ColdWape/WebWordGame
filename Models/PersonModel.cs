@@ -32,6 +32,10 @@ namespace WebWordGame.Models
         public List<GameModel> Games { get; set; }
 
         public List<RoomGamer> roomGamers { get; set; } = new List<RoomGamer>();
+        public bool IsInGame { get; set; }
+        public int QuantityOfWins { get; set; }
+        public int TotalScore { get; set; }
+
         public int LastVisitedRoom { get; set; }
 
 

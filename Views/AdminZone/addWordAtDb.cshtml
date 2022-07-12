@@ -1,0 +1,52 @@
+﻿@model WebWordGame.Models.LoginModel
+
+<div>
+    <div id="main">
+        <div id="logInForm">
+
+            <div id="login" style="display: inline;">
+
+
+                <div style="text-align: center; text-decoration: underline;">
+                    Добавление слова
+                </div>
+                <br />
+
+                <form asp-action="addwordatdb" asp-controller="adminzone" asp-anti-forgery="true" method="post">
+                    @if (ViewBag.Alert != null)
+                    {
+                        <div class="validation">
+                            @ViewBag.Alert
+                        </div>
+                    }
+
+                    <br />
+                    <div>
+                        <div class="form-group">
+                            @*<label asp-for="LoginName">Введите логин</label>*@
+                            <input type="text" id="word" name="word" class="inputBlock" placeholder="Введите слово" autocomplete="off" />
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            @*<label asp-for="Password">Введите пароль</label>*@
+                            <input id="verifyWord" name="verifyWord" class="inputBlock" placeholder="Повторите введенное существительное" autocomplete="off" />
+                        </div>
+
+
+                        <div class="formForBtns">
+                            <input type="submit" value="Добавть слово в базу" class="menuBtns formBtns" />
+                            <a asp-action="index" asp-controller="home" style="text-decoration: none">
+                                <input type="button" value="В главное меню" class="menuBtns formBtns" />
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

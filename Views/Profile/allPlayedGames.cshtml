@@ -1,0 +1,92 @@
+﻿<link href="~/css/userInfo.css" rel="stylesheet" />
+<link href="~/css/queueStyles.css" rel="stylesheet" />
+
+
+<div class="mainUserUnfo" >
+    <div class="blockUserInfo" style="height:95%">
+        <div class="namePhotoAndStatus">
+            <h1 style="font-size: 40px; margin-top: 15px;">
+                История игр
+            </h1>
+            <div class="profileLeaveBtns">
+                <a asp-action="index" asp-controller="home">
+                    <input class="menuBtns logoutBtn" type="submit" value="На главную" />
+                </a>
+                <a asp-action="queue" asp-controller="game">
+                    <input class="menuBtns logoutBtn" type="submit" value="К списку игр" />
+                </a>
+                <a asp-action="userpage" asp-controller="profile">
+                    <input class="menuBtns logoutBtn" type="submit" value="Профиль" />
+                </a>
+            </div>
+
+        </div>
+        <div class="playedGames">
+            <table>
+                <thead>
+                    <tr>
+                        <td width="18%" style="padding-left: 10px;">Дата начала</td>
+                        <td width="20%">Результат</td>
+                        <td>Игроки</td>
+                    </tr>
+                </thead>
+                @if (ViewBag.Games.Count > 0)
+                {
+
+                    <tbody>
+                        @foreach (var game in ViewBag.Games)
+                        {
+                            <tr >
+                                <td style="padding-left: 10px;">@game.StartTime</td>
+                                <td>
+                                    @if (game.Winner == User.Identity.Name)
+                                    {
+                                        <span>Победитель</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Участник</span>
+                                    }
+
+                                </td>
+                                <td>
+                                    <div class="gamersList">
+
+                                        @foreach (var gamer in game.roomGamers)
+                                        {
+                                            <div class="shortUserInfo">
+                                                <div class="oneOfTheUserPhoto">
+                                                    <img src="@gamer.Person.ProfileImageId.ImageSource" />
+                                                </div>
+                                                <div>@gamer.Person.LoginName</div>
+                                                <div>@gamer.Score очков</div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                </td>
+                            </tr>
+                            
+                        }
+
+                    </tbody>
+                }
+
+                @*<tbody>
+                            <tr>
+                                <td>@ViewBag.Games.StartTime</td>
+                                <td>Результат</td>
+                                <td>
+                                    @foreach (var gamer in ViewBag.Games.roomGamers)
+                                    {
+                                        <div> ssss @gamer.PersonId;</div>
+                                    }
+                            </td>
+                        </tr>
+                    </tbody>*@
+
+            </table>
+        </div>
+
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,10 @@ namespace WebWordGame.Controllers
         [HttpGet]
         public IActionResult Registration()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("index", "home");
+            }
             return View();
         }
         [HttpPost]
@@ -42,7 +47,7 @@ namespace WebWordGame.Controllers
                 if (person == null && personEmail == null)
                 {
                     // добавляем пользователя в бд
-                    person = new PersonModel { LoginName = model.LoginName, Email = model.Email, Password = model.Password };
+                    person = new PersonModel { LoginName = model.LoginName, Email = model.Email, Password = Crypto.Hash(model.Password) };
                     Role userRole = await _dataBaseContext.Roles.FirstOrDefaultAsync(r => r.Name == "person");
                     if (userRole != null)
                         person.Role = userRole;
@@ -52,12 +57,13 @@ namespace WebWordGame.Controllers
 
                     ImageModel userImage = await _dataBaseContext.Images.FirstOrDefaultAsync(i => i.ImageSource == "../images/starting_profile_images/default_image.jpg");
                     person.ProfileImageId = userImage;
+                    person.QuantityOfWins = 0;
                     _dataBaseContext.People.Add(person);
                     await _dataBaseContext.SaveChangesAsync();
 
                     await Authenticate(person); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("index", "home");
                 }
                 else
                 {
@@ -81,8 +87,13 @@ namespace WebWordGame.Controllers
         //Методы для входа 
 
         [HttpGet]
+
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated )
+            {
+                return RedirectToAction("index", "home");
+            }
             return View();
         }
         [HttpPost]
@@ -93,13 +104,18 @@ namespace WebWordGame.Controllers
             {
                 PersonModel person = await _dataBaseContext.People
                     .Include(u => u.Role)
-                    .FirstOrDefaultAsync(u => u.LoginName == model.LoginName && u.Password == model.Password);
+                    .FirstOrDefaultAsync(u => u.LoginName == model.LoginName);
                 if (person != null)
                 {
-                    await Authenticate(person); // аутентификация
+                    bool IsVerifyPassword = Crypto.VerifyHashed(person.Password, model.Password);
+                    if (IsVerifyPassword)
+                    {
+                        await Authenticate(person); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                        return RedirectToAction("index", "home");
+                    }
                 }
+                
 
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
@@ -110,7 +126,7 @@ namespace WebWordGame.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("index","home");
         }
 
 

@@ -17,12 +17,16 @@ namespace WebWordGame.Models
         public string GameCreated = DateTime.Now.ToShortTimeString() + " " + DateTime.Now.ToShortDateString();
 
         public DateTime StartTime { get; set; }
-        public string GameEnded { get; set; }
+        public DateTime GameEnded { get; set; }
         public string GameLifeTime { get; set; }
         public string GameStatus { get; set; }
         public int MaximumNumbersOfGamers { get; set; }
         public string Creator { get; set; }
+        public string Winner { get; set; }
 
+        public string access_token { get; set; }
+
+        public int quantityOfConnectedPeoples { get; set; }
     }
 
     public class RoomGamer
@@ -33,7 +37,7 @@ namespace WebWordGame.Models
         public int PersonId { get; set; }
         public PersonModel Person { get; set; }
 
-        public int Position { get; set; }
+        public bool IsWinner { get; set; }
         public bool IsActive { get; set; }
         public int TimeToMove { get; set; }
         public string ConnectId { get; set; }

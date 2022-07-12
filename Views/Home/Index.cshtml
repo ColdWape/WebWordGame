@@ -15,44 +15,36 @@
         {
 
 
-            <a asp-action="GameTypeChoosingPage" asp-controller="Home" class="menuBtns formBtns">Начать играть</a>
-            <a asp-action="UserPage" asp-controller="Profile" class="menuBtns formBtns">Профиль</a>
-
-            <input class="menuBtns formBtns" type="button" value="Рейтинг">
+            <a asp-action="queue" asp-controller="game" style="text-decoration: none;">
+                <input value="Начать играть" type="button" class="menuBtns formBtns" />
+            </a>
+            <a asp-action="userpage" asp-controller="profile" style="text-decoration: none;">
+                <input value="Профиль" type="button" class="menuBtns formBtns" />
+            </a>
 
             <input class="menuBtns formBtns" type="button" value="Правила">
-            <br>
-            <input class="menuBtns formBtns" type="button" value="Помощь">
-            <br>
-            <input class="menuBtns formBtns" type="button" value="Reports">
-            <br>
-            <form asp-action="queue" asp-controller="game">
-                <button class="menuBtns headBtn">Обновить комнаты</button>
-            </form>
+            @*<input class="menuBtns formBtns" type="button" value="Помощь">*@
         }
         else if (ViewContext.HttpContext.User.IsInRole("admin"))
         {
-            <a asp-action="GameTypeChoosingPage" asp-controller="Home" class="menuBtns formBtns">Начать играть</a>
-            <a asp-action="UserPage" asp-controller="Profile" class="menuBtns formBtns">Профиль</a>
-
-            <input class="menuBtns formBtns" type="button" value="Рейтинг">
-
+            <a asp-action="queue" asp-controller="game" style="text-decoration: none;">
+                <input value="Начать играть" type="button" class="menuBtns formBtns" />
+            </a>
+            <a asp-action="userpage" asp-controller="profile" style="text-decoration: none;">
+                <input value="Профиль" type="button" class="menuBtns formBtns" />
+            </a>
+            <a asp-action="addwordatdb" asp-controller="adminzone" style="text-decoration: none;">
+                <input value="Добавить слово" type="button" class="menuBtns formBtns" />
+            </a>
             <input class="menuBtns formBtns" type="button" value="Правила">
-            <br>
-            <input class="menuBtns formBtns" type="button" value="Помощь">
-            <br>
-            <input class="menuBtns formBtns" type="button" value="Reports">
-            <br>
-            <br>
-            <input class="menuBtns formBtns" type="button" value="Заявки">
-            <br>
-            <input class="menuBtns formBtns" type="button" value="Отчеты">
+            
         }
         else
         {
             <div id="startBtns">
-                <a asp-action="GameTypeChoosingPage" asp-controller="Home" class="menuBtns formBtns">Начать играть</a>
-                <input class="menuBtns formBtns" type="button" value="Рейтинг">
+                <a asp-action="queue" asp-controller="game" style="text-decoration: none;">
+                    <input value="Начать играть" type="button" class="menuBtns formBtns" />
+                </a>
 
                 <input class="menuBtns formBtns" type="button" value="Правила">
 

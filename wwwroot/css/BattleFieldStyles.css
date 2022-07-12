@@ -58,7 +58,7 @@
     border-radius: 25px;
     /*overflow: hidden;*/
     margin: 10px;
-    /*position: relative;*/
+    position: relative;
 }
 
 .sendedWordsBlock {
@@ -76,6 +76,7 @@
     margin-bottom: 10px;
     padding-bottom: 5px;
     overflow: overlay;
+    position: relative;
 }
 
 
@@ -171,4 +172,35 @@
     margin-right: -50%;
     transform: translate(-50%, -50%);
     font-size: 35px;
+}
+
+.mistakeAlertText {
+    position: absolute;
+    /* left: 50%; */
+    bottom: 10%;
+    left: 10%;
+    /* background: linear-gradient(119deg, rgba(209,0,0,1) 0%, rgba(181,1,50,1) 25%, rgba(168,4,57,1) 50%, rgba(136,0,176,1) 75%, rgba(63,0,134,1) 100%); */
+    background: radial-gradient(circle, rgba(209,0,0,1) 0%, rgba(209,0,0,0.4990371148459384) 100%);
+    padding: 10px;
+    opacity: 0.9;
+    border: solid 2px;
+    border-radius: 15px;
+    width: 65%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 22px;
+    display: none;
+    /* animation: hideAlert 1s forwards;
+}
+
+@keyframes hideAlert {
+    0% {
+        display: block;
+        opacity: 1;
+    }
+
+    100% {
+        display: none;
+        opacity: 0;
+    }*/
 }

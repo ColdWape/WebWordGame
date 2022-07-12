@@ -273,7 +273,50 @@
     }
 }
 
+#endedGameSection {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    opacity: 0;
+    animation: canceledGameSection 0.5s forwards;
+}
+
+#confirmDisconnectFromTheGame {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    opacity: 0;
+    animation: canceledGameSection 0.5s forwards;
+}
+
+#fireworks-canvas {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: none;
+    opacity: 0;
+    animation: canceledGameSection 0.5s forwards;
+}
+
 .canceledGameBlock{
     width: 450px;
     height:150px;
+}
+
+.theWinner {
+    width: 100%;
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 10px;
+    font-size: 20px;
 }

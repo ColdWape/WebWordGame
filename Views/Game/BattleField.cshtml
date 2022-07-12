@@ -14,7 +14,7 @@
                 <h1 style="margin:0;" class="seconds"></h1>
             </td>
             <td style=" display: flex; justify-content: end;">
-                @if (User.Identity.Name == ViewBag.Game.Creator)
+                @if (User.Identity.Name == ViewBag.Game.Creator && ViewBag.Game.GameStatus == "Created")
                 {
                     <form asp-action="StartGame" asp-controller="Game" id="startGameBtn">
                         <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
@@ -22,13 +22,13 @@
                     </form>
 
                 }
-                <form asp-action="LeaveFromGame" asp-controller="Game">
-                    <input value="@User.Identity.Name" name="leaverName" style="display: none" />
-                    <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
-                    <button class="menuBtns headBtn" type="submit">Покинуть игру</button>
-                </form>
-                <button class="menuBtns headBtn" type="button" onclick="stop()">stop</button>
+            <form asp-action="checkForLeaving" asp-controller="Game">
+                <input value="@User.Identity.Name" name="leaverName" style="display: none" />
+                <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
+                <button class="menuBtns headBtn" type="submit">Покинуть игру</button>
+                @*<button class="menuBtns headBtn" onclick="showConfirmForDisconnectMessage()">Покинуть игру</button>*@
 
+            </form>
             </td>
         </tr>
     </thead>
@@ -39,60 +39,64 @@
 
                     @foreach (var gamer in ViewBag.Game.roomGamers)
                     {
-                        <div class="theGamer" name="@gamer.Person.LoginName">
-                            <div class="gamersAvatarBlock">
-                                @foreach (var photo in ViewBag.Photos)
-                                {
-                                    if (gamer.Person.ProfileImageId == photo)
+                        @if (gamer.ConnectedToTheGame )
+                        {
+                            <div class="theGamer" name="@gamer.Person.LoginName">
+                                <div class="gamersAvatarBlock">
+                                    @foreach (var photo in ViewBag.Photos)
                                     {
-                                        <img class="gamersAvatar" src="@photo.ImageSource" />
-                                        break;
+                                        if (gamer.Person.ProfileImageId == photo)
+                                        {
+                                            <img class="gamersAvatar" src="@photo.ImageSource" />
+                                            break;
+                                        }
                                     }
-                                }
+                                </div>
+                                <div class="nameAndStatus">
+                                    <div class="gamersName">@gamer.Person.LoginName</div>
+                                    <div class="gamersRank">Счет: @gamer.Score</div>
+                                    @*<div class="gamersScore">&#9825; &#9825; &#9825;</div>*@
+                                </div>
                             </div>
-                            <div class="nameAndStatus">
-                                <div class="gamersName">@gamer.Person.LoginName</div>
-                                <div class="gamersRank">Счет: 0</div>
-                                <div class="gamersScore">&#9825; &#9825; &#9825;</div>
-                            </div>
-                        </div>
+                        }
+
                     }
 
 
                     @*<div class="theGamer">
-                            <div class="gamersAvatarBlock">
-                                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
-                            </div>
-                            <div class="nameAndStatus">
-                                <div class="gamersName">ReiFarareiqqqqqqqqqqqqqq</div>
-                                <div class="gamersRank">Novice</div>
-                                <div class="gamersScore">Score: 1548</div>
-                            </div>
-                        </div>
-                        <div class="theGamer">
-                            <div class="gamersAvatarBlock">
-                                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
-                            </div>
-                            <div class="nameAndStatus">
-                                <div class="gamersName">№№№№№№№№№№</div>
-                                <div class="gamersRank">Novice</div>
-                                <div class="gamersScore">Score: 1504896</div>
-                            </div>
-                        </div>*@
+            <div class="gamersAvatarBlock">
+                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+            </div>
+            <div class="nameAndStatus">
+                <div class="gamersName">ReiFarareiqqqqqqqqqqqqqq</div>
+                <div class="gamersRank">Novice</div>
+                <div class="gamersScore">Score: 1548</div>
+            </div>
+        </div>
+        <div class="theGamer">
+            <div class="gamersAvatarBlock">
+                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+            </div>
+            <div class="nameAndStatus">
+                <div class="gamersName">№№№№№№№№№№</div>
+                <div class="gamersRank">Novice</div>
+                <div class="gamersScore">Score: 1504896</div>
+            </div>
+        </div>*@
                 </div>
             </td>
             <td colspan="3">
                 <div class="theGameBlock">
                     @*<div class="gameTimer">
-                            <div class="startTextBlock">
-                                <div class="startText">Ожидание начала игры</div>
-                            </div>
-                        </div>*@
+            <div class="startTextBlock">
+                <div class="startText">Ожидание начала игры</div>
+            </div>
+        </div>*@
 
 
                     <div class="sendedWordsBlock">
 
-                        <div class="sendedWord userWord">
+                        <!--<div class="sendedWord userWord">
                             <div class="userIsAuthor">ReiFararei</div>
                             <div class="wordName">karrramba</div>
                         </div>
@@ -125,16 +129,54 @@
                             <div class="wordName">@ViewBag.Game.roomGamers.Count</div>
 
                         </div>
+                        <div class="sendedWord ">
+                            <div class="opponentIsAuthor">Timati</div>
+                            <div class="wordName">Akihabara</div>
+                        </div>
+                        <div class="sendedWord userWord">
+                            <div class="userIsAuthor">GriB</div>
+                            <div class="wordName">Breeeeedooom</div>
+                        </div>
+                        <div class="sendedWord ">
+                            <div class="opponentIsAuthor">Timati</div>
+                            <div class="wordName">Akihabara</div>
+                        </div>
+                        <div class="sendedWord userWord">
+                            <div class="userIsAuthor">GriB</div>
+                            <div class="wordName">Breeeeedooom</div>
+                        </div>
+                        <div class="sendedWord ">
+                            <div class="opponentIsAuthor">Timati</div>
+                            <div class="wordName">Akihabara</div>
+                        </div>
+                        <div class="sendedWord userWord">
+                            <div class="userIsAuthor">GriB</div>
+                            <div class="wordName">Breeeeedooom</div>
+                        </div>
+                        <div class="sendedWord ">
+                            <div class="opponentIsAuthor">Timati</div>
+                            <div class="wordName">Akihabara</div>
+                        </div>
+                        <div class="sendedWord userWord">
+                            <div class="userIsAuthor">GriB</div>
+                            <div class="wordName">Breeeeedooom</div>
+                        </div>-->
+                        @*<div class="mistakeAlertBlock">*@
+
+                        @*</div>*@
+                    </div>
+                    <div class="mistakeAlertText">
+                        Какой-то алерт
 
                     </div>
                     @*<div class="sendTheWordBlock">  *@
                     <form asp-action="SendTheWord" asp-controller="Game" class="sendTheWordBlock">
-                        <input name="theWord" id="theWord" type="text" class="typeTheWord inputBlock" placeholder="Поле для ввода слова" />
+                        <input name="theWord" id="theWord" type="text" class="typeTheWord inputBlock" placeholder="Поле для ввода слова" autocomplete="off"/>
                         <input name="username" id="forTakeUsername" value="@User.Identity.Name" style="display:none" />
                         <input name="gameId" value="@ViewBag.gameId" style="display:none" />
-                        <input name="timeLeft" id="timeLeft" value="0" @*style="display:none"*@ />
+                        <input name="timeLeft" id="timeLeft" value="0" style="display:none" />
 
-                        <input type="submit" value="send" class="menuBtns sendTheWordBtn" />
+                        <input type="submit" value="Отправить" class="menuBtns sendTheWordBtn" />
                     </form>
                     @*</div>*@
                 </div>
@@ -150,7 +192,44 @@
             <h1 class="titleForCreateGame">Игра была отменена создателем</h1>
 
             <div class="selectBlockInCreateGame">
-                <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMesage()" style="margin: auto; width: 100%;" />
+                <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMessage()" style="margin: auto; width: 100%;" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="endedGameSection">
+    <canvas width="640" height="480" id="fireworks-canvas"></canvas>
+
+    <div class="createGameBlock canceledGameBlock">
+        <div class="createGameBackgrnd"></div>
+        <div class="createGameForm">
+            <h1 class="titleForCreateGame">Игра завершена!</h1>
+            <div class="theWinner">Победил игрок <span id="theWinnerName"></span>, набрав <span id="theWinnerScore"></span> очков</div>
+            <div class="selectBlockInCreateGame">
+                <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMessage()" style="margin: auto; width: 100%;" />
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="confirmDisconnectFromTheGame">
+
+    <div class="createGameBlock canceledGameBlock" style="height: 200px;">
+        <div class="createGameBackgrnd"></div>
+        <div class="createGameForm">
+            <h1 class="titleForCreateGame">Вы уверены, что хотите покинуть игру?</h1>
+
+            <div class="selectBlockInCreateGame">
+                <form asp-controller="game" asp-action="LeaveFromGame" style="width: 100%;margin: 10px;">
+                    <input value="@User.Identity.Name" name="leaverName" style="display: none" />
+                    <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
+                    <input type="submit" class="menuBtns headBtn" value="Да"  style="width: 100%;" />
+
+                </form>
+                <input type="button" class="menuBtns headBtn" value="Отмена" onclick="hideConfirmForDisconnectMessage()" style="width: 100%; margin: 10px;" />
+
             </div>
         </div>
     </div>
@@ -167,9 +246,17 @@
     <input name="sendSeconds" id="sendSeconds" value="10" style="display:none" />
     <input type="submit" value="send" style="display:none" class="sendTheTime" />
 </form>
-<audio controls="controls" id="lowTimeAudio">
-    <source src="~/sounds/lowTime.mp3" type="audio/mpeg" autoplay="autoplay"/>
-</audio>
+<div style="display: none">
+    <audio controls="controls" id="endOfTheGameSound">
+        <source src="~/sounds/endOfTheGameSound.mp3" type="audio/mpeg" autoplay="autoplay" />
+    </audio>
+    <audio controls="controls" id="timeToMove">
+        <source src="~/sounds/timeToMoveSound.mp3" type="audio/mpeg" autoplay="autoplay" />
+    </audio>
+    <audio controls="controls" id="lowTimeAudio">
+        <source src="~/sounds/lowTimeSound.mp3" type="audio/mpeg" autoplay="autoplay" />
+    </audio>
+</div>
 <script>
     //function UsersWordAdd(word) {
     //    var sendedWordsBlock = document.getElementsByClassName('sendedWordsBlock')[0];
@@ -224,24 +311,76 @@
 
 <script>
 
-    function hideCanceledGameMesage() {
-        document.location.replace("https://localhost:5001/");
+    function hideCanceledGameMessage() {
+        document.location.replace("https://localhost:5001/game/queue");
     }
-    function showCanceledGameMesage() {
+    function showCanceledGameMessage() {
         document.getElementById("canceledGameSection").style.display = "block";
     }
+
+    function hideConfirmForDisconnectMessage() {
+        document.getElementById("confirmDisconnectFromTheGame").style.display = "none";
+    }
+
+    //function showConfirmForDisconnectMessage() {
+    //    document.getElementById("confirmDisconnectFromTheGame").style.display = "block";
+    //}
+
+    function showEndedGameMessage(name, score) {
+        document.getElementById("theWinnerName").innerHTML = name;
+        document.getElementById("theWinnerScore").innerHTML = score;
+        fireworkStart();
+        document.getElementById('endOfTheGameSound').play();
+        document.getElementById("endedGameSection").style.display = "block";
+    }
+
     function stop() {
         clearInterval(seconds_timer_id);
 
     }
+
+    function showAlert(textForAlert) {
+        document.getElementsByClassName('mistakeAlertText')[0].innerHTML = textForAlert;
+        $(function () { $('.mistakeAlertText').stop().fadeIn(250).fadeOut(3000); });
+    }
 </script>
+
+
+<script src="~/js/fireworks.js"></script>
+<script>
+
+    function fireworkStart() {
+        var firework = JS_FIREWORKS.Fireworks({
+            id: 'fireworks-canvas',
+            hue: 120,
+            particleCount: 50,
+            delay: 0,
+            minDelay: 75,
+            maxDelay: 150,
+            boundaries: { // of respawn and target
+                top: 50,
+                bottom: 240,
+                left: 50,
+                right: 590
+            },
+            fireworkSpeed: .5,
+            fireworkAcceleration: 1.05,
+            particleFriction: .95,
+            particleGravity: 1.5
+        });
+        firework.start();
+    };
+</script>
+
+
+
 <script>
     const hubConnection = new signalR.HubConnectionBuilder()
         .withUrl("/chat")
         .build();
     //Штука, которая отвечает за подключение типочков
 
-    hubConnection.on('ShowNewPerson', function (name, photo) {
+    hubConnection.on('ShowNewPerson', function (name, photo, score) {
 
         var gamerBlock = document.createElement('div');
         gamerBlock.classList.add("theGamer");
@@ -267,16 +406,16 @@
 
         var gamersRank = document.createElement('div');
         gamersRank.classList.add("gamersRank")
-        gamersRank.innerHTML = "Счёт: 0";
+        gamersRank.innerHTML = "Счёт: " + score;
 
 
-        var gamersScore = document.createElement('div');
-        gamersScore.classList.add("gamersScore")
-        gamersScore.innerHTML = "&#9825; &#9825; &#9825;";
+        //var gamersScore = document.createElement('div');
+        //gamersScore.classList.add("gamersScore")
+        //gamersScore.innerHTML = "&#9825; &#9825; &#9825;";
 
         nameAndStatus.appendChild(gamersName);
         nameAndStatus.appendChild(gamersRank);
-        nameAndStatus.appendChild(gamersScore);
+        //nameAndStatus.appendChild(gamersScore);
 
         gamerBlock.appendChild(nameAndStatus);
 
@@ -287,14 +426,24 @@
 
     hubConnection.on('autoLeaving', function () {
 
-
-        showCanceledGameMesage();
+        showCanceledGameMessage();
 
     });
+
+    hubConnection.on('showConfirmForDisconnectMessage', function () {
+            document.getElementById("confirmDisconnectFromTheGame").style.display = "block";
+    });
+
 
     hubConnection.on('HideDisconnectedUser', function (username) {
 
         document.getElementsByName(username)[0].remove();
+
+    });
+
+    hubConnection.on('endedGameMessage', function (name, score) {
+
+        showEndedGameMessage(name, score);
 
     });
 
@@ -351,61 +500,87 @@
     });
 
     hubConnection.on("queueMistake", function () {
-        alert("Сейчас не Ваша очередь")
+        //alert("Сейчас не Ваша очередь")
+        //document.getElementsByClassName('mistakeAlertText')[0].innerHTML = "Сейчас не Ваша очередь";
+        //$('.mistakeAlertText').innerHTML = "Сейчас не Ваша очередь";
+        //$('.mistakeAlertBlock')[0].fadeIn(0).fadeOut(1500);
+
+        showAlert("Сейчас не Ваша очередь");
+    });
+    hubConnection.on("emptyField", function () {
+        //alert("Поле для слова не может быть пустым")
+        showAlert("Поле для слова не может быть пустым");
     });
     hubConnection.on("wordStartWithWrongLetter", function (requiredLetter) {
-        alert("Слово должно начинаться на букву " + requiredLetter)
+        //alert("Слово должно начинаться на букву " + requiredLetter)
+        showAlert("Слово должно начинаться на букву " + requiredLetter);
     });
     hubConnection.on("wordHasBeenUsed", function () {
-        alert("Слово уже было исользовано")
+        //alert("Слово уже было использовано")
+        showAlert("Слово уже было использовано");
     });
     hubConnection.on("wordDoesntExist", function () {
-        alert("Такого слова не существует")
+        //alert("Такого слова не существует")
+        showAlert("Такого слова не существует");
     });
     hubConnection.on("gameWasntStarted", function () {
-        alert("Дождись начала игры")
+        //document.getElementsByClassName('mistakeAlertText')[0].innerHTML = "Дождитесь начала игры";
+        //$(function () { $('.mistakeAlertText').stop().fadeIn(250).fadeOut(3000); });
+        showAlert("Дождитесь начала игры");
+
     });
     hubConnection.on("anotherMistakeWithSendingMessage", function () {
-        alert("Ошибка")
+        //alert("Ошибка")
+        showAlert("Непредвиденная ошибка");
     });
 
 
 
-    hubConnection.on("whoMustMoveNoActiveGamer", function (username) {
+    hubConnection.on("whoMustMoveNoActiveGamer", function (nextPlayerToMove,username) {
 
         //$("#timeLeft").val('10');
         //$(".seconds").text('10');
-        document.getElementById("showWhoMustMove").innerHTML = "Ход игрока " + username;
-        clearInterval(seconds_timer_id);
-        seconds = 10;
-
-
-        if (document.getElementById('forTakeUsername').value != username) {
-
-
-            //clearInterval(seconds_timer_id);
-            //seconds = 10;
-            //var seconds_timer_id = setInterval(function () {
-
-            //    if (seconds > 0) {
-
-            //        seconds--;
-            //        $(".seconds").text(seconds);
-
-            //    } else {
-            //        clearInterval(seconds_timer_id);
-
-            //    }
-            //}, 1000);
+        if (nextPlayerToMove == " ") {
+            document.getElementById("showWhoMustMove").innerHTML = "";
         }
+        else {
+            document.getElementById("showWhoMustMove").innerHTML = "Ход игрока " + nextPlayerToMove;
+
+        }
+        $(".seconds").text("");
+        //timerTest(nextPlayerToMove, username, true);
+        stopTheTimer()
+        //clearInterval(seconds_timer_id);
+        //seconds = 10;
+
+
+        //if (document.getElementById('forTakeUsername').value != username) {
+
+
+        //    //clearInterval(seconds_timer_id);
+        //    //seconds = 10;
+        //    //var seconds_timer_id = setInterval(function () {
+
+        //    //    if (seconds > 0) {
+
+        //    //        seconds--;
+        //    //        $(".seconds").text(seconds);
+
+        //    //    } else {
+        //    //        clearInterval(seconds_timer_id);
+
+        //    //    }
+        //    //}, 1000);
+        //}
 
 
     });
 
-    hubConnection.on("whoMustMoveActiveGamer", function (username) {
+    hubConnection.on("whoMustMoveActiveGamer", function () {
 
-        document.getElementById("showWhoMustMove").innerHTML = "Ход игрока " + username;
-        timerTest(username);
+        document.getElementById("showWhoMustMove").innerHTML = "Время сделать ход";
+        //startTheTimer(nextPlayerToMove, username, false);
+        startTheTimer();
 
         ////$("#timeLeft").val('10');
         ////$(".seconds").text('10');
@@ -437,14 +612,9 @@
         //}
     });
 
-    hubConnection.on("changeTimeByActiveGamer", function (number) {
-        $(".seconds").text(number);
-    });
-
-
-
-
-
+    //hubConnection.on("changeTimeByActiveGamer", function (number) {
+    //    $(".seconds").text(number);
+    //});
 
 
 

@@ -33,25 +33,48 @@ namespace WebWordGame
 
 
             string groupname = null;
-            foreach (var item in person.Games.OrderByDescending(i => i.Id))
-            {
-                if (item.GameStatus != "Ended")
-                {
-                    groupname = Convert.ToString(item.Id);
-                    break;
-                }
-            }
-
+            //foreach (var item in person.Games.OrderByDescending(i => i.Id))
+            //{
+            //    if (item.GameStatus != "Ended")
+            //    {
+            //        groupname = Convert.ToString(item.Id);
+            //        break;
+            //    }
+            //}
+            groupname = Convert.ToString(person.LastVisitedRoom);
 
             var connectionId = Context.ConnectionId;
-            RoomGamer roomGamer = _dataBaseContext.RoomGamers.First(i => i.Person == person);
+            RoomGamer roomGamer = _dataBaseContext.RoomGamers.Where(a => Convert.ToString(a.GameId) == groupname).First(i => i.Person == person);
             roomGamer.ConnectedToTheGame = true;
             roomGamer.ConnectId = connectionId;
+
+            GameModel theGame = _dataBaseContext.Games.Include(m => m.Messages).First(g => Convert.ToString(g.Id) == groupname);
+            theGame.quantityOfConnectedPeoples += 1;
+
             _dataBaseContext.SaveChanges();
             if (groupname != null)
             {
                 await Groups.AddToGroupAsync(connectionId, groupname);
 
+            }
+
+            if (theGame.GameStatus == "Started")
+            {
+                foreach (var word in theGame.Messages)
+                {
+                    if (word.Sender == Context.User.Identity.Name)
+                    {
+                        //_hubContext.Clients.Client(game.roomGamers.First(i => i.IsActive == true).ConnectId).SendAsync("whoMustMoveActiveGamer");
+
+                        await Clients.Client(Context.ConnectionId).SendAsync("UsersWordAdd", word.TextMeassage, word.Sender);
+                    
+                    }
+                    else
+                    {
+                        await Clients.Client(Context.ConnectionId).SendAsync("OpponentWordAdd", word.TextMeassage, word.Sender);
+
+                    }
+                }
             }
 
             //_chatManager.ConnectUser(userName, connectionId);
@@ -64,31 +87,22 @@ namespace WebWordGame
             //game.People.Add(person);
             //_dataBaseContext.SaveChanges();
 
-            await Clients.GroupExcept(groupname, connectionId).SendAsync("ShowNewPerson", person.LoginName, person.ProfileImageId.ImageSource);
-            await Clients.All.SendAsync("f", connectionId);
+            await Clients.GroupExcept(groupname, connectionId).SendAsync("ShowNewPerson", person.LoginName, person.ProfileImageId.ImageSource,
+                                                                theGame.roomGamers.First(u => u.Person.LoginName == person.LoginName).Score);
+            //await Clients.All.SendAsync("f", connectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            //var isUserRemoved = _chatManager.DisconnectUser(Context.ConnectionId);
-            //if (!isUserRemoved)
-            //{
-            //    await base.OnDisconnectedAsync(exception);
-            //}
+            
             
             var userName = Context.User.Identity.Name;
             PersonModel person = _dataBaseContext.People.Include(gamez => gamez.Games).FirstOrDefault(u => u.LoginName == userName);
 
             string groupname = null;
-            foreach (var item in person.Games)
-            {
-                if (item.GameStatus != "Ended")
-                {
-                    groupname = Convert.ToString(item.Id);
-                    break;
-                }
-            }
+            
+            groupname = Convert.ToString(person.LastVisitedRoom);
 
             var connectionId = Context.ConnectionId;
 
@@ -96,14 +110,25 @@ namespace WebWordGame
             {
                 await Groups.RemoveFromGroupAsync(connectionId, groupname);
 
-                RoomGamer roomGamer = _dataBaseContext.RoomGamers.First(i => i.Person == person);
-                roomGamer.ConnectedToTheGame = false;
+                RoomGamer roomGamer = _dataBaseContext.RoomGamers.Where(a => Convert.ToString(a.GameId) == groupname).First(i => i.Person == person);
+                if (roomGamer != null)
+                {
+                    roomGamer.ConnectedToTheGame = false;
+                    _dataBaseContext.Games.First(g => Convert.ToString(g.Id) == groupname).quantityOfConnectedPeoples--;
 
-                //GameModel game = _dataBaseContext.Games.FirstOrDefault(i => i.Id == Convert.ToInt32(groupname));
-                //if (game != null)
-                //{
-                //    game.People.Remove(person);
-                //}
+                    
+                    GameModel theGame = _dataBaseContext.Games.FirstOrDefault(g => Convert.ToString(g.Id) == groupname);
+                    if (theGame.Creator == person.LoginName && theGame.GameStatus == "Created")
+                    {
+                       
+                        await Clients.Group(Convert.ToString(groupname)).SendAsync("autoLeaving");
+                        _dataBaseContext.Games.Remove(theGame);
+                        _dataBaseContext.SaveChanges();
+
+
+                    }
+                }
+                
 
                 await Clients.GroupExcept(groupname, connectionId).SendAsync("HideDisconnectedUser", person.LoginName);
 

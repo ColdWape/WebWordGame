@@ -6,24 +6,25 @@
             
             <div id="login" style="display: inline;">
 
-                
+
                 <div style="text-align: center; text-decoration: underline;">
                     Войди и играй
                 </div>
+                <br />
+
                 <form asp-action="Login" asp-controller="LogIn" asp-anti-forgery="true">
                     <div class="validation" asp-validation-summary="ModelOnly"></div>
-                    <br />
                     <div>
                         <div class="form-group">
                             @*<label asp-for="LoginName">Введите логин</label>*@
-                            <input type="text" asp-for="LoginName" class="inputBlock" placeholder="Введите логин"/>
-                            <span asp-validation-for="LoginName" class="attention-text"/>
+                            <input type="text" asp-for="LoginName" class="inputBlock" placeholder="Введите логин" autocomplete="off" />
+                            <span asp-validation-for="LoginName" class="attention-text" />
                         </div>
                         <br />
                         <div class="form-group">
                             @*<label asp-for="Password">Введите пароль</label>*@
-                            <input asp-for="Password" class="inputBlock" placeholder="Введите пароль"/>
-                            <span asp-validation-for="Password" class="attention-text"/>
+                            <input asp-for="Password" class="inputBlock" placeholder="Введите пароль" autocomplete="off" />
+                            <span asp-validation-for="Password" class="attention-text" />
                         </div>
                         <div id="hideAndSeekPasswordBlock" style="display: flex;">
                             <div id="forEyeBlock" style=" margin-top: auto; margin-bottom: auto;"></div>
@@ -31,11 +32,11 @@
                             <div id="TextForHidePass" style="display: none; font-size:19px;">Скрыть пароль</div>
 
                         </div>
-                        
+
                         <div class="formForBtns">
                             <input type="submit" value="Войти" class="menuBtns formBtns" />
-                            <a class="menuBtns formBtns" asp-action="Registration" asp-controller="LogIn"> Нет аккаунта? </a>
-                            <a class="menuBtns formBtns" asp-action="Index" asp-controller="Home"> В главное меню </a>
+                            <a class="menuBtns formBtns" asp-action="registration" asp-controller="login"> Нет аккаунта? </a>
+                            <a class="menuBtns formBtns" asp-action="index" asp-controller="home"> В главное меню </a>
 
                         </div>
                     </div>

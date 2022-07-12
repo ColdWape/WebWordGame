@@ -69,7 +69,7 @@ namespace WebWordGame
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Game}/{action=queue}/{id?}");
+                    pattern: "{controller=home}/{action=index}/{id?}");
 
             });
         }
