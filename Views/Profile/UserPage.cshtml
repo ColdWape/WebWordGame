@@ -1,4 +1,8 @@
 ﻿@model WebWordGame.Models.PersonModel
+
+@{
+    ViewBag.Title = "Профиль";
+}
 <link href="~/css/userInfo.css" rel="stylesheet" />
 
 
@@ -19,8 +23,8 @@
                 </div>
 
                 @*<div class="userStatus">
-                    Новичок
-                </div>*@
+                        Новичок
+                    </div>*@
 
             </div>
             <div class="profileLeaveBtns">
@@ -30,7 +34,7 @@
                 <a asp-action="queue" asp-controller="game">
                     <input class="menuBtns logoutBtn" type="submit" value="К списку игр" />
                 </a>
-                <form asp-action="Logout" asp-controller="LogIn" asp-anti-forgery="true">
+                <form asp-action="logout" asp-controller="login">
                     <input class="menuBtns logoutBtn" type="submit" value="Выйти" />
                 </form>
             </div>
@@ -82,7 +86,7 @@
                         <tr>
                             <td colspan="2">
                                 <a asp-action="allplayedgames" asp-controller="profile">
-                                    <input class="menuBtns gamesHystoryBtn"  type="submit" value="История игр" />
+                                    <input class="menuBtns gamesHystoryBtn" type="submit" value="История игр" />
                                 </a>
                             </td>
                         </tr>

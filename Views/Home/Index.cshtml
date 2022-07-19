@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "The Word Game";
+    ViewBag.Title = "Главная";
 }
 
 
@@ -22,8 +22,9 @@
                 <input value="Профиль" type="button" class="menuBtns formBtns" />
             </a>
 
-            <input class="menuBtns formBtns" type="button" value="Правила">
-            @*<input class="menuBtns formBtns" type="button" value="Помощь">*@
+            <a asp-action="rules" asp-controller="home" style="text-decoration: none;">
+                <input value="Правила" type="button" class="menuBtns formBtns" />
+            </a>
         }
         else if (ViewContext.HttpContext.User.IsInRole("admin"))
         {
@@ -33,11 +34,14 @@
             <a asp-action="userpage" asp-controller="profile" style="text-decoration: none;">
                 <input value="Профиль" type="button" class="menuBtns formBtns" />
             </a>
+            <a asp-action="rules" asp-controller="home" style="text-decoration: none;">
+                <input value="Правила" type="button" class="menuBtns formBtns" />
+            </a>
             <a asp-action="addwordatdb" asp-controller="adminzone" style="text-decoration: none;">
                 <input value="Добавить слово" type="button" class="menuBtns formBtns" />
             </a>
-            <input class="menuBtns formBtns" type="button" value="Правила">
             
+
         }
         else
         {
@@ -46,7 +50,9 @@
                     <input value="Начать играть" type="button" class="menuBtns formBtns" />
                 </a>
 
-                <input class="menuBtns formBtns" type="button" value="Правила">
+                <a asp-action="rules" asp-controller="home" style="text-decoration: none;">
+                    <input value="Правила" type="button" class="menuBtns formBtns" />
+                </a>
 
             </div>
         }

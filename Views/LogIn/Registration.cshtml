@@ -1,5 +1,7 @@
 ﻿@model WebWordGame.Models.RegistrationModel
-
+@{
+    ViewBag.Title = "Регистрация";
+}
 
 <div>
     <div id="main">
@@ -51,8 +53,8 @@
                             <span asp-validation-for="ConfirmPassword" class="attention-text" />
                         </div>
                         @*<div>
-                    <input type="submit" value="Регистрация" />
-                </div>*@
+                                <input type="submit" value="Регистрация" />
+                            </div>*@
                         <div class="formForBtns">
                             <input class="menuBtns formBtns" type="submit" value="Зарегистрироваться" />
                             <br />

@@ -50,7 +50,7 @@ namespace WebWordGame.Models
             string userRoleName = "person";
 
             string adminLogin= "admin";
-            string adminPassword = "password";
+            string adminPassword = "FXy-a9m-hi5-ZCN";
 
             // добавляем роли
             Role adminRole = new Role { Id = 1, Name = adminRoleName };

@@ -1,8 +1,12 @@
-﻿<link href="~/css/userInfo.css" rel="stylesheet" />
+﻿@{
+    ViewBag.Title = "История игр";
+}
+
+<link href="~/css/userInfo.css" rel="stylesheet" />
 <link href="~/css/queueStyles.css" rel="stylesheet" />
 
 
-<div class="mainUserUnfo" >
+<div class="mainUserUnfo">
     <div class="blockUserInfo" style="height:95%">
         <div class="namePhotoAndStatus">
             <h1 style="font-size: 40px; margin-top: 15px;">
@@ -36,7 +40,7 @@
                     <tbody>
                         @foreach (var game in ViewBag.Games)
                         {
-                            <tr >
+                            <tr>
                                 <td style="padding-left: 10px;">@game.StartTime</td>
                                 <td>
                                     @if (game.Winner == User.Identity.Name)
@@ -66,7 +70,7 @@
 
                                 </td>
                             </tr>
-                            
+
                         }
 
                     </tbody>

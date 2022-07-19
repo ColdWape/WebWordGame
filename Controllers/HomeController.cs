@@ -22,11 +22,12 @@ namespace WebWordGame.Controllers
 
         public IActionResult Index()
         {
-            
-
+            return View();
+        }
+        public IActionResult Rules()
+        {
             return View();
         }
 
-       
     }
 }

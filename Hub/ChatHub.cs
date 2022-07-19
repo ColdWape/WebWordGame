@@ -110,23 +110,23 @@ namespace WebWordGame
             {
                 await Groups.RemoveFromGroupAsync(connectionId, groupname);
 
-                RoomGamer roomGamer = _dataBaseContext.RoomGamers.Where(a => Convert.ToString(a.GameId) == groupname).First(i => i.Person == person);
+                RoomGamer roomGamer = _dataBaseContext.RoomGamers.Where(a => Convert.ToString(a.GameId) == groupname).FirstOrDefault(i => i.Person == person);
                 if (roomGamer != null)
                 {
                     roomGamer.ConnectedToTheGame = false;
-                    _dataBaseContext.Games.First(g => Convert.ToString(g.Id) == groupname).quantityOfConnectedPeoples--;
-
+                    _dataBaseContext.Games.FirstOrDefault(g => Convert.ToString(g.Id) == groupname).quantityOfConnectedPeoples--;
                     
-                    GameModel theGame = _dataBaseContext.Games.FirstOrDefault(g => Convert.ToString(g.Id) == groupname);
-                    if (theGame.Creator == person.LoginName && theGame.GameStatus == "Created")
-                    {
+                    
+                    //GameModel theGame = _dataBaseContext.Games.FirstOrDefault(g => Convert.ToString(g.Id) == groupname);
+                    //if (theGame.Creator == person.LoginName && theGame.GameStatus == "Created")
+                    //{
                        
-                        await Clients.Group(Convert.ToString(groupname)).SendAsync("autoLeaving");
-                        _dataBaseContext.Games.Remove(theGame);
-                        _dataBaseContext.SaveChanges();
+                    //    await Clients.Group(Convert.ToString(groupname)).SendAsync("autoLeaving");
+                    //    _dataBaseContext.Games.Remove(theGame);
+                    //    _dataBaseContext.SaveChanges();
 
 
-                    }
+                    //}
                 }
                 
 

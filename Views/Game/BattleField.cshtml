@@ -1,4 +1,8 @@
-﻿<link href="~/css/BattleFieldStyles.css" rel="stylesheet" />
+﻿@{
+    ViewBag.Title = "Игра в слова";
+}
+
+<link href="~/css/BattleFieldStyles.css" rel="stylesheet" />
 <link href="~/css/queueStyles.css" rel="stylesheet" />
 <script src="~/js/Timer.js"></script>
 <table class="mainTable">
@@ -22,13 +26,13 @@
                     </form>
 
                 }
-            <form asp-action="checkForLeaving" asp-controller="Game">
-                <input value="@User.Identity.Name" name="leaverName" style="display: none" />
-                <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
-                <button class="menuBtns headBtn" type="submit">Покинуть игру</button>
-                @*<button class="menuBtns headBtn" onclick="showConfirmForDisconnectMessage()">Покинуть игру</button>*@
+                <form asp-action="checkForLeaving" asp-controller="Game">
+                    <input value="@User.Identity.Name" name="leaverName" style="display: none" />
+                    <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
+                    <button class="menuBtns headBtn" type="submit">Покинуть игру</button>
+                    @*<button class="menuBtns headBtn" onclick="showConfirmForDisconnectMessage()">Покинуть игру</button>*@
 
-            </form>
+                </form>
             </td>
         </tr>
     </thead>
@@ -39,7 +43,7 @@
 
                     @foreach (var gamer in ViewBag.Game.roomGamers)
                     {
-                        @if (gamer.ConnectedToTheGame )
+                        @if (gamer.ConnectedToTheGame)
                         {
                             <div class="theGamer" name="@gamer.Person.LoginName">
                                 <div class="gamersAvatarBlock">
@@ -64,34 +68,34 @@
 
 
                     @*<div class="theGamer">
-            <div class="gamersAvatarBlock">
-                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
-            </div>
-            <div class="nameAndStatus">
-                <div class="gamersName">ReiFarareiqqqqqqqqqqqqqq</div>
-                <div class="gamersRank">Novice</div>
-                <div class="gamersScore">Score: 1548</div>
-            </div>
-        </div>
-        <div class="theGamer">
-            <div class="gamersAvatarBlock">
-                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
-            </div>
-            <div class="nameAndStatus">
-                <div class="gamersName">№№№№№№№№№№</div>
-                <div class="gamersRank">Novice</div>
-                <div class="gamersScore">Score: 1504896</div>
-            </div>
-        </div>*@
+                            <div class="gamersAvatarBlock">
+                                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+                            </div>
+                            <div class="nameAndStatus">
+                                <div class="gamersName">ReiFarareiqqqqqqqqqqqqqq</div>
+                                <div class="gamersRank">Novice</div>
+                                <div class="gamersScore">Score: 1548</div>
+                            </div>
+                        </div>
+                        <div class="theGamer">
+                            <div class="gamersAvatarBlock">
+                                <img class="gamersAvatar" src="~/images/starting_profile_images/image_girl_in_headphones.jpg" />
+                            </div>
+                            <div class="nameAndStatus">
+                                <div class="gamersName">№№№№№№№№№№</div>
+                                <div class="gamersRank">Novice</div>
+                                <div class="gamersScore">Score: 1504896</div>
+                            </div>
+                        </div>*@
                 </div>
             </td>
             <td colspan="3">
                 <div class="theGameBlock">
                     @*<div class="gameTimer">
-            <div class="startTextBlock">
-                <div class="startText">Ожидание начала игры</div>
-            </div>
-        </div>*@
+                            <div class="startTextBlock">
+                                <div class="startText">Ожидание начала игры</div>
+                            </div>
+                        </div>*@
 
 
                     <div class="sendedWordsBlock">
@@ -171,7 +175,7 @@
                     </div>
                     @*<div class="sendTheWordBlock">  *@
                     <form asp-action="SendTheWord" asp-controller="Game" class="sendTheWordBlock">
-                        <input name="theWord" id="theWord" type="text" class="typeTheWord inputBlock" placeholder="Поле для ввода слова" autocomplete="off"/>
+                        <input name="theWord" id="theWord" type="text" class="typeTheWord inputBlock" placeholder="Поле для ввода слова" autocomplete="off" />
                         <input name="username" id="forTakeUsername" value="@User.Identity.Name" style="display:none" />
                         <input name="gameId" value="@ViewBag.gameId" style="display:none" />
                         <input name="timeLeft" id="timeLeft" value="0" style="display:none" />
@@ -192,7 +196,10 @@
             <h1 class="titleForCreateGame">Игра была отменена создателем</h1>
 
             <div class="selectBlockInCreateGame">
-                <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMessage()" style="margin: auto; width: 100%;" />
+                <a asp-action="queue" asp-controller="game" style="width: 100%; height: 100%">
+                    <input type="button" class="menuBtns headBtn" value="Ок" style="margin: auto; width: 100%;" />
+                </a>
+                @*<input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMessage()" style="margin: auto; width: 100%;" />*@
             </div>
         </div>
     </div>
@@ -207,7 +214,10 @@
             <h1 class="titleForCreateGame">Игра завершена!</h1>
             <div class="theWinner">Победил игрок <span id="theWinnerName"></span>, набрав <span id="theWinnerScore"></span> очков</div>
             <div class="selectBlockInCreateGame">
-                <input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMessage()" style="margin: auto; width: 100%;" />
+                <a asp-action="queue" asp-controller="game" style="width: 100%; height: 100%">
+                    <input type="button" class="menuBtns headBtn" value="Ок" style="margin: auto; width: 100%;" />
+                </a>
+                @*<input type="button" class="menuBtns headBtn" value="Ок" onclick="hideCanceledGameMessage()" style="margin: auto; width: 100%;" />*@
             </div>
         </div>
     </div>
@@ -225,7 +235,7 @@
                 <form asp-controller="game" asp-action="LeaveFromGame" style="width: 100%;margin: 10px;">
                     <input value="@User.Identity.Name" name="leaverName" style="display: none" />
                     <input value="@ViewBag.Game.Id" name="roomId" style="display: none" />
-                    <input type="submit" class="menuBtns headBtn" value="Да"  style="width: 100%;" />
+                    <input type="submit" class="menuBtns headBtn" value="Да" style="width: 100%;" />
 
                 </form>
                 <input type="button" class="menuBtns headBtn" value="Отмена" onclick="hideConfirmForDisconnectMessage()" style="width: 100%; margin: 10px;" />
@@ -431,7 +441,7 @@
     });
 
     hubConnection.on('showConfirmForDisconnectMessage', function () {
-            document.getElementById("confirmDisconnectFromTheGame").style.display = "block";
+        document.getElementById("confirmDisconnectFromTheGame").style.display = "block";
     });
 
 
@@ -536,7 +546,7 @@
 
 
 
-    hubConnection.on("whoMustMoveNoActiveGamer", function (nextPlayerToMove,username) {
+    hubConnection.on("whoMustMoveNoActiveGamer", function (nextPlayerToMove, username) {
 
         //$("#timeLeft").val('10');
         //$(".seconds").text('10');

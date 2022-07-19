@@ -26,7 +26,7 @@ namespace WebWordGame.Controllers
 
 
 
-        
+
 
 
 
@@ -71,7 +71,7 @@ namespace WebWordGame.Controllers
 
                 _dataBaseContext.Games.Add(newGame);
                 _dataBaseContext.SaveChanges();
-
+                _dataBaseContext.GameInfo.FirstOrDefault().QuantityOfGames++;
                 newGame.access_token = Crypto.Hash(Convert.ToString(newGame.Id));
                 _dataBaseContext.SaveChanges();
 
@@ -124,9 +124,10 @@ namespace WebWordGame.Controllers
                 GameModel game = _dataBaseContext.Games.Include(rg => rg.roomGamers).First(b => b.Id == roomId);
                 if (game.Creator == leaverName && game.GameStatus == "Created")
                 {
-                    
+
                     _hubContext.Clients.Group(Convert.ToString(roomId)).SendAsync("autoLeaving");
-                    
+                    _dataBaseContext.GameInfo.FirstOrDefault().QuantityOfGames--;
+
 
                     _dataBaseContext.Games.Remove(game);
                     _dataBaseContext.SaveChanges();
@@ -257,11 +258,11 @@ namespace WebWordGame.Controllers
         {
             GameModel game = _dataBaseContext.Games.Include(u => u.roomGamers).Include(p => p.People).FirstOrDefault(g => g.Id == Convert.ToInt32(roomId));
 
-            
+
             if (game.roomGamers.Count > 1)
             {
 
-                
+
 
                 game.GameStatus = "Started";
                 game.StartTime = DateTime.Now;
@@ -278,7 +279,7 @@ namespace WebWordGame.Controllers
                 _dataBaseContext.Messages.Add(new MessageModel
                 {
                     TextMeassage = firstWord.Name,
-                    Sender = "System",
+                    Sender = "Стартовое слово",
                     Date = DateTime.Now,
                     Game = game
                 }); ;
@@ -304,7 +305,7 @@ namespace WebWordGame.Controllers
                 int counter = 0;
                 foreach (var gamer in game.roomGamers)
                 {
-                    
+
                     if (gamer.ConnectedToTheGame)
                     {
                         gamer.OrderOfTheMove = OrderOfTheMove[counter];
@@ -349,7 +350,7 @@ namespace WebWordGame.Controllers
 
 
 
-                    string theLastWord = game.Messages.OrderByDescending(i => i.Id).First().TextMeassage;
+                    string theLastWord = game.Messages.OrderByDescending(i => i.Id).FirstOrDefault().TextMeassage;
                     RoomGamer activeGamer = null;
                     foreach (var item in game.roomGamers)
                     {
@@ -385,6 +386,7 @@ namespace WebWordGame.Controllers
                                             Game = game
                                         });
 
+                                        _dataBaseContext.SaveChanges();
 
 
                                         word.NumberOfUses += 1;
@@ -490,6 +492,7 @@ namespace WebWordGame.Controllers
                                             }
                                             activeGamer.IsWinner = true;
                                             game.Winner = activeGamer.Person.LoginName;
+                                            activeGamer.Person.QuantityOfWins++;
 
                                             _dataBaseContext.SaveChanges();
 
@@ -579,7 +582,7 @@ namespace WebWordGame.Controllers
                 {
                     _hubContext.Clients.Client(gamerId).SendAsync("anotherMistakeWithSendingMessage");
                 }
-            return NoContent();
+                return NoContent();
             }
             return RedirectToAction("queue", "game");
 
